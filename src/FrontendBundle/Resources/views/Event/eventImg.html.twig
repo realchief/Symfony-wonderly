@@ -1,0 +1,325 @@
+{%- extends '@Frontend/frontend_layout.html.twig' -%}
+
+{%- block stylesheets -%}
+    {{ parent() }}
+    <style>
+        .content {
+            padding-top: 60px
+        }
+        .alert-danger {
+            margin-top: 20px;
+        }
+        .alert-danger ul {
+            list-style-type: none !important;
+        }
+        .links-for-picture {
+            margin-bottom: 20px;
+        }
+        .links-for-picture input {
+            margin-top: 20px;
+        }
+        .links-for-picture span {
+
+        }
+        .success {
+            margin-top: 20px;
+            color: #ef6461;
+            font-size: 24px;
+        }
+        .error {
+            margin-top: 20px;
+            color: firebrick;
+            font-size: 24px;
+        }
+    </style>
+{%- endblock -%}
+
+{%- block body -%}
+    <header>
+        {%- include 'FrontendBundle:Partial:header.html.twig' -%}
+    </header>
+
+    {%
+    set createOrganizerPath = 'http://'
+        ~ app.request.httpHost
+        ~ path('frontend_user_createorganizer')
+    %}
+    {%
+    set createEventPath = 'http://'
+        ~ app.request.httpHost
+        ~ path('frontend_event_eventcreate')
+    %}
+    {%
+    set refer = app.request.server.get('HTTP_REFERER')|default('/')
+    %}
+
+    <div class="main">
+        {%- block main -%}
+            <div class="container" style="margin-top: 20px">
+                {% if event.imageEvent.toArray is empty %}
+                <div style="margin-top: 30px"></div>
+                {% else %}
+                    <div class="col-md-12">
+                    {% for img in  event.imageEvent.toArray %}
+                        <div class="col-md-3 img" style="padding-bottom: 20px;">
+                            {% if (img.img != null) %}
+                                <img src="{{ asset('uploads/image/') ~ img.img }}" style="width: 200px; height: 130px;">
+                            {% else %}
+                                <img src="{{ img.url }}" style="width: 200px; height: 130px;">
+                            {% endif %}
+                            <br><br>
+                            <a href="{{ path('frontend_event_eventimgdelete', {'id':img.id}) }}" style="">
+                                <button class="btn btn-sm btn-danger delete">
+                                   <span>Delete</span>
+                                </button>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="content">
+                    {% if refer == createOrganizerPath or refer == createEventPath %}
+                        {% if event.name != null %}
+                            <div class="form-group" style="">
+                                <div class="col-md-offset-1 col-md-10 alert alert-success text-center"
+                                     align="center" style="">
+                                    <span>{{ event.name }}</span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    {% if event.name != null %}
+                    <div class="form-group col-md-offset-1 col-md-10" style="">
+                        <h2>{{ event.name }}</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                    {% endif %}
+                    <br>
+                    <div  class="col-md-offset-1 text-center"
+                          style=" border: dashed; border-color:#ef6461;  width: 950px; height: 200px;">
+                        <p style="margin-top: 80px">
+                            <h3>Drag and drop your images</h3>
+                        </p>
+                    </div>
+                    <br>
+                    <div id="actions" class="row">
+
+                        <div class="col-lg-7 col-md-offset-1" style="margin-bottom: 80px">
+                            <!-- The fileinput-button span is used to style the file input field as button -->
+                            <span class="btn btn-success fileinput-button">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>Add files...</span>
+                            </span>
+                            <span class="btn btn-success btn-pic-links" data-toggle="modal" data-target="#myModal">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>Add links...</span>
+                            </span>
+                            <button type="submit" class="btn btn-primary start">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span>Submit</span>
+                            </button>
+                        </div>
+                    </div>
+                    <di class="preview-link"></di>
+
+                    <div class="table table-striped files" id="previews">
+                        <div id="template" class="file-row col-md-2">
+                            <!-- This is used as the file preview template -->
+                            <div class="">
+                                <span class="preview"><img data-dz-thumbnail /></span><br><br>
+                            </div>
+                            <div>
+                                <strong class="error text-danger" data-dz-errormessage></strong>
+                            </div>
+                            <div>
+
+                            </div>
+                            <div>
+                                <span class="start"></span>
+                                <button data-dz-remove class="btn btn-danger delete">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    <span>Delete</span>
+                                </button>
+                                <br><br><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Add your link picture
+                            <br><br>
+                            <input type="text" class="form-control input-link">
+                            <span class="error-link" style="color: #d9534f"><br>This value is not a valid URL.<br></span>
+                            <br>
+                            <div class="pul-right">
+                                <span class="btn btn-info" id="add-linc-pic">Add</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        {%- endblock -%}
+    </div>
+    <footer class="footer">
+        {%- include 'FrontendBundle:Partial:footer.html.twig' -%}
+    </footer>
+{%- endblock body -%}
+{% block javascripts %}
+{{ parent() }}
+{% javascripts
+'@FrontendBundle/Resources/public/js/dropzone.js'
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $('.error-link').hide();
+    var count = 1;
+    $('#add-linc-pic').click(function (e) {
+        overlay();
+        var link = $('.input-link').val();
+        $.ajax({
+            url: "{{ path('frontend_event_apiimglinkcheck') }}",
+            type: 'POST',
+            data: {
+                picLink: link
+            },
+            success: function(data) {
+                if (data.status == 'success'){
+                    $('.error-link').hide();
+                    $('.input-link').val('');
+                    $("#myModal").modal('hide');
+                    $('.preview-link').append('' +
+                        '<div class="col-md-2">' +
+                        '<div>' +
+                        '<img id="link" class="img-responsive" width="80" height="80" src="'+link+'" /> ' +
+                        '</div>' +
+                        '<div style="margin-top: 10px">' +
+                        '<button class="btn btn-danger delete delete-link" data="pictureLink'+count+'">' +
+                        '<i class="glyphicon glyphicon-trash"></i>' +
+                        '<span>Delete</span>' +
+                        '</button>' +
+                        '<br><br><br>' +
+                        '</div>' +
+                        '</div>');
+                    $('.preview-link').append('<input type="hidden" value="'+link+'" id=pictureLink'+count+'>');
+                    count++;
+                } else {
+                    $('.error-link').show();
+                }
+            },
+            error: function (data) {
+                $('.error-link').show();
+            },
+            complete: function () {
+                removeOverlay();
+            }
+        })
+    });
+
+
+    $(document).on('click', '.start', function (e) {
+        e.preventDefault();
+        var arr = [];
+        for (var n = 1; n < count; n++) {
+            if (document.getElementById('pictureLink' + n + '') !== null){
+                arr.push(document.getElementById('pictureLink' + n + '').value );
+            }
+        }
+        if (arr.length > 0) {
+            addLinksPic(arr);
+        }
+    });
+
+    $(document).on('click', '.delete-link', function(e) {
+        e.preventDefault();
+        var idForDelete = $( this ).attr('data');
+        idForDelete = document.getElementById('' + idForDelete + '');
+        idForDelete.id = 'delete';
+        $( this ).parent().parent().remove();
+    });
+
+    function addLinksPic(val) {
+        overlay();
+        $.ajax({
+            url: "{{ path('frontend_event_apieventimglink', {'id': event.id}) }}",
+            type: 'POST',
+            data: {
+                picLink: val
+            },
+            success: function(data) {
+                if (data.status !== 'error') {
+                    window.location.href = '{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}';
+                }
+            },
+            complete: function () {
+                removeOverlay();
+            }
+        });
+    };
+
+});
+var previewNode = document.querySelector("#template");
+previewNode.id = "";
+var previewTemplate = previewNode.parentNode.innerHTML;
+previewNode.parentNode.removeChild(previewNode);
+
+var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+    uploadMultiple: true,
+    url: "{{ path('frontend_event_apieventimg', {'id': event.id}) }}", // Set the url
+    thumbnailWidth: 80,
+    thumbnailHeight: 80,
+    parallelUploads: 20,
+    acceptedFiles: "image/jpeg,image/png,",
+    previewTemplate: previewTemplate,
+    autoQueue: false, // Make sure the files aren't queued until manually added
+    previewsContainer: "#previews", // Define the container to display the previews
+    clickable: ".fileinput-button", // Define the element that should be used as click trigger to select files.
+    init: function() {
+        this.on("success", function() {
+            window.location.href = '{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}';
+        });
+    }
+});
+
+myDropzone.on("addedfile", function(file) {
+    // Hookup the start button
+    file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+});
+
+document.querySelector("#actions .start").onclick = function() {
+    myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+};
+
+function overlay(){
+    var docHeight = $(document).height();
+    $("body").append("<div id='overlay'></div>");
+    $("#overlay")
+        .height(docHeight)
+        .css({
+            'opacity' : 0.4,
+            'position': 'absolute',
+            'top': 0,
+            'left': 0,
+            'background-color': 'black',
+            'width': '100%',
+            'z-index': 5000
+        });
+    $("#overlay").append('<img src="{{ asset('Resources/public/images/wonderly-loader.gif') }}" style="z-index:5001; position: fixed; margin-left: 45%; margin-top: 20%">');
+};
+
+function removeOverlay(){
+    $('#overlay').remove();
+};
+
+</script>
+{% endblock %}

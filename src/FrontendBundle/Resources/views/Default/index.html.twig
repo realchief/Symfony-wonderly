@@ -1,0 +1,409 @@
+{%- extends '@Frontend/frontend_layout.html.twig' -%}
+
+{%- block stylesheets -%}
+        {{ parent() }}
+        {% stylesheets
+        '@homepageCSS'
+        filter="cssrewrite"
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%- endstylesheets -%}
+<style>
+.modal{
+    z-index: 20;
+}
+.modal-backdrop{
+    z-index: 10;
+    }
+</style>
+{%- endblock stylesheets -%}
+
+{%- block main -%}
+
+    {# Header Carousel #}
+    {% include '@Frontend/Default/partial/partialHeader.html.twig' %}
+
+    {# Filter Modal #}
+    {% include '@Frontend/Default/partial/modalFilter.html.twig' %}
+
+    {# Calendar #}
+    {% include '@Frontend/Default/partial/calendar.html.twig' %}
+
+    {# Event List After Click By Date #}
+    <div id="eventList">
+        {% if afterFilters is defined %}
+            {# Event List #}
+            {% include '@Frontend/Default/partial/eventList.html.twig' %}
+        {% endif %}
+    </div>
+
+    {# Pagination After Click By Date #}
+    <div id="pagination">
+        {% if afterFilters is defined %}
+            {# Pagination #}
+            {{ pagination | raw }}
+        {% endif %}
+    </div>
+
+    {# Categories After Click By Date #}
+    <div id="categories">
+        {% if afterFilters is defined %}
+            {# Categories #}
+            {% include '@Frontend/Default/partial/categories.html.twig' %}
+        {% endif %}
+    </div>
+
+    {# Last News #}
+    {% include '@Frontend/Default/partial/lastNews.html.twig' %}
+
+    {# Recommend #}
+    {% include '@Frontend/Default/partial/recommend.html.twig' %}
+
+    {% if afterFilters is not defined %}
+    {# Event List #}
+    {% include '@Frontend/Default/partial/eventList.html.twig' %}
+    {# Pagination #}
+    {{ pagination | raw }}
+    {% endif %}
+
+    {# Blog List #}
+    {% include '@Frontend/Default/partial/blogList.html.twig' %}
+
+    {% if afterFilters is not defined %}
+    {# Categories #}
+    {% include '@Frontend/Default/partial/categories.html.twig' %}
+    {% endif %}
+
+    <div class="modal share-modal-show" style="padding-top: 150px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="" style="vertical-align: middle">
+                <div class="modal-body">
+
+                <span type="button" data-dismiss="modal" class="pull-right visible-xs visible-sm" style="color:white; cursor: pointer;">
+                    &#10006;
+                </span>
+                    <div class="share-buttons text-center">
+                        <a id="fb-event" target="_blank"><img src="{{ asset('Resources/public/img/share-button/facebook.png') }}" width="60"></a>
+                        <a id="twit-event" target="_blank"><img src="{{ asset('Resources/public/img/share-button/twitter.png') }}" width="60"></a>
+                        <a id="sms-event" target="_blank"><img src="{{ asset('Resources/public/img/share-button/sms.png') }}" width="60"></a>
+                        <a id="email-event" target="_blank"><img src="{{ asset('Resources/public/img/share-button/email.png') }}" width="60"></a>
+                        <a id="reddit-event" target="_blank"><img src="{{ asset('Resources/public/img/share-button/reddit.png') }}" width="60"></a>
+                        <span class="pull-right hidden-xs hidden-sm" style="cursor: pointer; position: absolute; float: right; color:white" data-dismiss="modal">&#10006;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="link-login-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="modal-logo">
+                    </div>
+                    <h4>Sign up with a FREE account to:</h4>
+                    <h4>1) Save events to your profile</h4>
+                    <h4>2) Add to your Calendar</h4>
+                    <h4>3) VIP access to special events</h4>
+                    <h4>4) Free Giveaways!</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="login-social">
+                        <div class="login-btn login-btn-fb" style="cursor: pointer" onclick="facebook_click()" id="facebookLogin">
+                            Continue with Facebook
+                        </div>
+                        <div id="gSignInWrapper">
+                            <div class="login-btn login-btn-gp" style="cursor: pointer" id="googleLogin">
+                                Continue with Google
+                            </div>
+                        </div>
+
+                        <div class="login-or">
+                            OR
+                        </div>
+
+                        <a class="login-btn login-btn-red" href="{{ path('fos_user_registration_register') }}">
+                            Create Account
+                        </a>
+
+                        <div class="login-note have-account">
+                            Already have an Account? <a href="{{ path('fos_user_security_login') }}">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-homepage">
+        <div class="container">
+            <h2>Looking for Activity in your City?</h2>
+            <h3>Sign in Wonderly and Keep in Touch</h3>
+            <a href="#" class="btn">Sign in</a>
+        </div>
+    </div>
+{%- endblock main -%}
+
+{% block javascripts %}
+    {{- parent() -}}
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    {% javascripts
+    '@homepageJS'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+        var OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
+                appId: "15421353-e9c3-4139-8a5c-dd9d96fe59b5",
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        window.homepage = {
+            modalCount: 0
+        };
+
+        /**
+         * Service worker include
+         */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {navigator.serviceWorker
+                .register('{{ asset('sw.js') }}', {
+                    scope: '.'
+                })
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        {% if app.user == null %}
+        setTimeout(function() {
+            $('#link-login-modal').modal('show');
+        }, 50000);
+        $(document).on('hide.bs.modal','#link-login-modal', function () {
+            window.homepage.modalCount++;
+            if (window.homepage.modalCount < 2) {
+                setTimeout(function() {
+                    $('#link-login-modal').modal('show');
+                }, 60000);
+            }
+        });
+        {% endif %}
+
+        socialApiKey("{{ google_social_api_key }}", "{{ facebook_social_api_key }}");
+        function sendSocialData(profile) {
+            $.ajax({
+                url: "{{ path('frontend_user_apisocial') }}",
+                type: 'POST',
+                data: {profile: profile},
+                success: function (response) {
+                    if (response === 'success') {
+                        window.location.replace("{{ path('frontend_default_index') }}")
+                    } else {
+                        console.log(response);
+                    }
+                }
+            })
+        }
+
+        $(document).ready(function(){
+            $('.more-filters').click(function () {
+
+                var checkboxArr = $('form[name="filter"]').find('input[type="checkbox"]');
+                var $checkbox = '';
+                for (i = 0; i < checkboxArr.length; ++i) {
+                    $checkbox = $(checkboxArr[i]);
+                    if ($checkbox.attr('checked')) {
+                        $("label[for='"+$checkbox.attr('id')+"']").addClass('label-checked');
+                    }
+                }
+            });
+
+            /**
+             *  Function for checked age
+             */
+            $('.ages-wrapper').find('label').on('click', function(){
+                if ($('#' + $(this).attr('for')).is(':checked')) {
+                    $(this).removeClass('label-checked');
+                } else {
+                    $(this).addClass('label-checked');
+                }
+            });
+
+            /**
+             *  Function for addFavorite.js
+             */
+            checkedFavoriteEvents(
+                'addFavoriteEvent',
+                '<i class="fa fa-heart-o"></i>',
+                '<i class="fa fa-heart" style="color: #ef6461"></i>',
+                '{{ path('frontend_event_apieventfavorite') }}'
+            )
+        });
+
+        /**
+         * Function for clear filter on homepage
+         */
+        function clearFilter() {
+            $.get( "{{ path('frontend_default_apiclearfilter') }}", function( data ) {
+                if (data.status === 'success') {
+                    window.location.replace("{{ path('frontend_default_index') }}");
+                }
+            });
+        }
+
+        /**
+         * Function for clear filter on homepage modal
+         */
+        function clearFilterModal() {
+            $.get( "{{ path('frontend_default_apiclearfilter') }}");
+            //Clear Address
+            $("* [name='filter[address]']").val('');
+            //Clear All Checkboxes
+            $(':checkbox').each(function(i,item){
+                this.checked = item.defaultChecked;
+            });
+            //Clear time, distance, age
+            var arrayForm = $('.label-checked');
+            for (i = 0; i < arrayForm.length; ++i) {
+                $(arrayForm[i]).removeClass('label-checked');
+            }
+        }
+
+        function eventByDate(d) {
+            overlay();
+            window.activeDate = d;
+            $(".categoryActive").removeClass("categoryActive");
+            ajaxEventByDateOrPage(1);
+        }
+        function eventByPage(page) {
+            overlay();
+            ajaxEventByDateOrPage(page);
+        }
+        function eventByCategory(categoryId, e) {
+            overlay();
+            ajaxEventByCategory(categoryId);
+            $(".categoryActive").removeClass("categoryActive");
+            $(e).addClass('categoryActive');
+            $(window).scrollTo($('#eventList'), 'slow');
+        }
+        function ajaxEventByDateOrPage(page) {
+            var data = {};
+            if (typeof window.activeDate === "undefined") {
+                data = {page:page};
+            } else {
+                data = {
+                    page:page,
+                    date:window.activeDate
+                };
+            }
+            if ($('.categoryActive').length > 0) {
+                data['category'] = $('.categoryActive').attr('categoryid');
+            }
+
+            var searchByName = $('#search-by-name').val();
+            if(searchByName != '') {
+                data['searchByName'] = searchByName;
+            }
+
+            $.ajax({
+                url: '{{ path('frontend_default_apieventbydate') }}',
+                method: 'POST',
+                data: data,
+                success: function (data) {
+                    $(window).scrollTo($('#eventList'), 'slow');
+                    if (typeof window.activeDate === "undefined") {
+                        $('.events-list').html(data.html);
+                        $('.pagination-events-list').html(data.paginator);
+                    } else {
+                        $('.events-list').remove();
+                        $('.pagination-events-list').remove();
+                        $('#eventList').html(data.html);
+                        $('#pagination').html(data.paginator);
+                        if (typeof data.categories === "undefined") {
+                            var oldCategories = $('.category-list');
+                            $('.category-list').remove();
+                            $('#categories').html(oldCategories);
+                        }else{
+                            $('.category-list').remove();
+                            $('#categories').html(data.categories);
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                complete: function() {
+                    removeOverlay()
+                }
+            });
+        }
+
+        function ajaxEventByCategory(categoryId) {
+            var data = {};
+            if (typeof window.activeDate === "undefined") {
+                data = {category:categoryId};
+            } else {
+                data = {
+                    category:categoryId,
+                    date:window.activeDate
+                };
+            }
+            $.ajax({
+                url: '{{ path('frontend_default_apieventbycategory') }}',
+                method: 'POST',
+                data: data,
+                success: function (data) {
+                    $('.events-list').remove();
+                    $('.pagination-events-list').remove();
+                    var oldCategories = $('.category-list');
+                    $('.category-list').remove();
+                    $('#eventList').html(data.html);
+                    $('#pagination').html(data.paginator);
+                    $('#categories').html(oldCategories);
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                complete: function() {
+                    removeOverlay()
+                }
+            });
+        }
+
+        function overlay(){
+            var docHeight = $(document).height();
+            $("body").append("<div id='overlay'></div>");
+            $("#overlay")
+                .height(docHeight)
+                .css({
+                    'opacity' : 0.4,
+                    'position': 'absolute',
+                    'top': 0,
+                    'left': 0,
+                    'background-color': 'black',
+                    'width': '100%',
+                    'z-index': 5000
+                });
+            $("#overlay").append('<img src="{{ asset('Resources/public/images/wonderly-loader.gif') }}" style="z-index:5001; position: fixed; margin-left: 45%; margin-top: 20%">');
+        };
+
+        function removeOverlay(){
+            $('#overlay').remove();
+        };
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initAutocomplete"
+            async defer></script>
+{% endblock %}

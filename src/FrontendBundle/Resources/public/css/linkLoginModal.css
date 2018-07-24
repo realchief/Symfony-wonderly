@@ -1,0 +1,52 @@
+
+#link-login-modal .modal-content {
+    background-image: url(../images/pr_01_28111_min.jpg);
+    margin-top: 20px;
+}
+#link-login-modal .modal-content {
+    max-width: 350px;
+}
+#link-login-modal .modal-content .login-note.have-account {
+    margin-bottom: 0;
+}
+#link-login-modal .modal-content{
+    color: #2b2b2b;
+}
+#link-login-modal .modal-content .close {
+    color: #2b2b2b;
+    opacity: 1;
+}
+
+#link-login-modal .modal-content .login-note a{
+    color: #2b2b2b;
+}
+
+@media (min-width: 992px) {
+    #link-login-modal {
+        margin-left: 250px;
+    }
+}
+@media (max-width: 992px) {
+    #link-login-modal {
+        margin-left: 200px;
+    }
+    #link-login-modal .modal-content {
+        width: auto;
+    }
+}
+@media (max-width: 767px) {
+    #link-login-modal {
+        margin-left: auto;
+    }
+    #link-login-modal .modal-content {
+        max-width: none;
+    }
+
+}
+
+@media (max-width: 420px) {
+    #link-login-modal .modal-content .login-btn,
+    .modal-body .login-note.have-account {
+        width: 270px;
+    }
+}

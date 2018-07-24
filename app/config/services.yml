@@ -1,0 +1,24 @@
+imports:
+  - { resource: '../../src/Component/config/services.yml' }
+  - { resource: "@FrontendBundle/Resources/config/services.yml" }
+  - { resource: "@AppBundle/Resources/config/services.yml" }
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  AppBundle\:
+    resource: '../../src/AppBundle/*'
+    exclude: '../../src/AppBundle/{Entity,Repository,Tests}'
+
+  UserBundle\Security\Http\Authorization\AccessDeniedHandler: ~
+
+  app.twig_extension:
+    class: 'AppBundle\Twig\TwigExtension'
+    arguments:
+      - '@app.nearest.date'
+      - '@doctrine.orm.entity_manager'
+    tags:
+      - { name: twig.extension }

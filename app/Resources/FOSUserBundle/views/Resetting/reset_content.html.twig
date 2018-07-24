@@ -1,0 +1,26 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<body class="login">
+    <div class="login-form">
+        {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+            <div class="login-fields">
+                <div class="login-field">
+                    {{ form_row(form.plainPassword) }}
+                </div>
+                    <div class="login-field">
+                        <button type="submit" id="_submit" name="_submit">Save Password</button>
+                    </div>
+                </div>
+                {#<div>#}
+                    {#{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}#}
+                        {#{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |#}
+                        {#<a href="{{ path('fos_user_security_logout') }}">#}
+                            {#{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}#}
+                        {#</a>#}
+                    {#{% else %}#}
+                        {#<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>#}
+                    {#{% endif %}#}
+                {#</div>#}
+        {{ form_end(form) }}
+    </div>
+</body>

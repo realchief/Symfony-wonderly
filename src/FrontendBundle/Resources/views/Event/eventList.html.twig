@@ -1,0 +1,348 @@
+{%- extends '@Frontend/frontend_layout.html.twig' -%}
+
+{%- block main -%}
+    <div class="wd-carousel owl-carousel">
+        <div class="owl-item wd-slide nestle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 nestle-left">
+                        <img src="{{ asset('assets/img/nestle-logo.png') }}" alt="">
+                        <p>Take care of your child since 1894</p>
+                    </div>
+                    <div class="col-md-7 nestle-right">
+                        <img src="{{ asset('assets/img/nestle-img.png') }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="owl-item wd-slide nestle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 nestle-left">
+                        <img src="{{ asset('assets/img/nestle-logo.png') }}" alt="">
+                        <p>Take care of your child since 1894</p>
+                    </div>
+                    <div class="col-md-7 nestle-right">
+                        <img src="{{ asset('assets/img/nestle-img.png') }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="owl-item wd-slide nestle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 nestle-left">
+                        <img src="{{ asset('assets/img/nestle-logo.png') }}" alt="">
+                        <p>Take care of your child since 1894</p>
+                    </div>
+                    <div class="col-md-7 nestle-right">
+                        <img src="{{ asset('assets/img/nestle-img.png') }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-filter">
+        <div class="container">
+            <div class="row">
+                {#<div class="col-md-2 more-filters">#}
+                    {#<a href="#" class="btn btn-fill btn-block">More Filters</a>#}
+                {#</div>#}
+
+                <div class="col-md-3 filter-btns">
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-wd">Experience</a>
+                        <a href="#" class="btn btn-wd active">WonderFun</a>
+                    </div>
+                </div>
+                <div class="col-md-7 filter-date">
+                    <h3>Choose Date</h3>
+                    <div class="fd-wrapper">
+                        <div class="filter-date-carousel owl-carousel">
+                        {%  for chooseDate in dateArray %}
+                        <div class="item day{{ chooseDate | date('d') }}" onclick="eventByDate('{{ chooseDate | date }}')">
+                            <span class="fd-date">{{ chooseDate | date('M, j') }}</span>
+                            <span class="fd-day">{{ chooseDate | date('l') }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="events-list">
+        {% if eventsMorning %}
+        <div class="container">
+            <h3 class="section-title">Morning</h3>
+            <div class="row">
+                {% for event in eventsMorning %}
+                <div class="col-md-3 event-box-wrapper">
+                    <div class="event-box">
+                        <div class="event-box-top">
+                            <!-- Event Images -->
+                            {% if event.imageEvent.toArray is empty %}
+                                <img src="{{ asset('Resources/public/img/event-img.jpg')  }}">
+                            {% else %}
+                                {% set count = 1 %}
+                            {% for image in event.imageEvent.toArray if count < 2 %}
+                                {% if image.img != null %}
+                                    <img src="{{ asset('uploads/image/') ~ image.img  }}">
+                                {% else %}
+                                    <img src="{{ image.url  }}">
+                                {% endif %}
+                                {% set count = count + 1 %}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="event-box-info">
+                            <h3>
+                                <a href="{{ path('frontend_event_eventshow', {'id':event.id}) }}">{{ event.name }}</a>
+                            </h3>
+
+                            <!-- Event Origin -->
+                            {% if event.origin == null %}
+
+                            {% else %}
+                                <div class="event-box-date">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    {{ event.origin | date ('g:i a') }}
+                                </div>
+                            {% endif %}
+
+
+                            <!-- Event Address -->
+                            {% if event.address == null %}
+
+                            {% else %}
+                                <div class="event-box-date">
+                                    <i class="glyphicon glyphicon-map-marker"></i>
+                                    {{ event.address }}
+                                </div>
+                            {% endif %}
+                        </div>
+                     </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if eventsAfternoon %}
+        <div class="container">
+            <h3 class="section-title">Afternoon</h3>
+            <div class="row">
+                {% for event in eventsAfternoon %}
+                    <div class="col-md-3 event-box-wrapper">
+                        <div class="event-box">
+                            <div class="event-box-top">
+                                <!-- Event Images -->
+                                {% if event.imageEvent.toArray is empty %}
+                                    <img src="{{ asset('Resources/public/img/event-img.jpg')  }}">
+                                {% else %}
+                                    {% set count = 1 %}
+                                    {% for image in event.imageEvent.toArray if count < 2 %}
+                                        {% if image.img != null %}
+                                            <img src="{{ asset('uploads/image/') ~ image.img  }}">
+                                        {% else %}
+                                            <img src="{{ image.url  }}">
+                                        {% endif %}
+                                        {% set count = count + 1 %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="event-box-info">
+                                <h3>
+                                    <a href="{{ path('frontend_event_eventshow', {'id':event.id}) }}">{{ event.name }}</a>
+                                </h3>
+
+                                <!-- Event Origin -->
+                                {% if event.origin == null %}
+
+                                {% else %}
+                                    <div class="event-box-date">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        {{ event.origin | date ('g:i a') }}
+                                    </div>
+                                {% endif %}
+
+
+                                <!-- Event Address -->
+                                {% if event.address == null %}
+
+                                {% else %}
+                                    <div class="event-box-date">
+                                        <i class="glyphicon glyphicon-map-marker"></i>
+                                        {{ event.address }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if eventsEvening %}
+        <div class="container">
+            <h3 class="section-title">Evening</h3>
+            <div class="row">
+                {% for event in eventsEvening %}
+                    <div class="col-md-3 event-box-wrapper">
+                        <div class="event-box">
+                            <div class="event-box-top">
+                                <!-- Event Images -->
+                                {% if event.imageEvent.toArray is empty %}
+                                    <img src="{{ asset('Resources/public/img/event-img.jpg')  }}">
+                                {% else %}
+                                    {% set count = 1 %}
+                                    {% for image in event.imageEvent.toArray if count < 2 %}
+                                        {% if image.img != null %}
+                                            <img src="{{ asset('uploads/image/') ~ image.img  }}">
+                                        {% else %}
+                                            <img src="{{ image.url  }}">
+                                        {% endif %}
+                                        {% set count = count + 1 %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="event-box-info">
+                                <h3>
+                                    <a href="{{ path('frontend_event_eventshow', {'id':event.id}) }}">{{ event.name }}</a>
+                                </h3>
+
+                                <!-- Event Origin -->
+                                {% if event.origin == null %}
+
+                                {% else %}
+                                    <div class="event-box-date">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        {{ event.origin | date ('g:i a') }}
+                                    </div>
+                                {% endif %}
+
+
+                                <!-- Event Address -->
+                                {% if event.address == null %}
+
+                                {% else %}
+                                    <div class="event-box-date">
+                                        <i class="glyphicon glyphicon-map-marker"></i>
+                                        {{ event.address }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if events %}
+        <div class="container">
+            <h3 class="section-title">All Day</h3>
+            <div class="row">
+                {% for event in events %}
+                    <div class="col-md-3 event-box-wrapper">
+                        <div class="event-box">
+                            <div class="event-box-top">
+                                <!-- Event Images -->
+                                {% if event.imageEvent.toArray is empty %}
+                                    <img src="{{ asset('Resources/public/img/event-img.jpg')  }}">
+                                {% else %}
+                                    {% set count = 1 %}
+                                    {% for image in event.imageEvent.toArray if count < 2 %}
+                                        {% if image.img != null %}
+                                            <img src="{{ asset('uploads/image/') ~ image.img  }}">
+                                        {% else %}
+                                            <img src="{{ image.url  }}">
+                                        {% endif %}
+                                        {% set count = count + 1 %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="event-box-info">
+                                <h3>
+                                    <a href="{{ path('frontend_event_eventshow', {'id':event.id}) }}">{{ event.name }}</a>
+                                </h3>
+
+                                <!-- Event Origin -->
+                                {% if event.origin == null %}
+
+                                {% else %}
+                                    <div class="event-box-date">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        {{ event.origin | date ('g:i a') }}
+                                    </div>
+                                {% endif %}
+
+
+                                <!-- Event Address -->
+                                {% if event.address == null %}
+
+                                {% else %}
+                                    <div class="event-box-date">
+                                        <i class="glyphicon glyphicon-map-marker"></i>
+                                        {{ event.address }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="categories">
+        <div class="container">
+            <h3 class="section-title">Browse by categories</h3>
+            <div class="row">
+                <div class="row">
+                    {% for key, value in categoryEvents %}
+                        <div class="col-md-3 category-wrapper">
+                            <div class="category category-main" style="background-image: url({{ asset('Resources/public/img/event-img.jpg') }})">
+                                <h3 class="category-title">
+                                    {{ key }}
+                                </h3>
+                                <div class="category-posts-count">
+                                    {{ value | length }} events
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-homepage">
+        <div class="container">
+            <h2>Looking for Activity in your City?</h2>
+            <h3>Sign in Wonderly and Keep in Touch</h3>
+            <a href="#" class="btn">Sign in</a>
+        </div>
+    </div>
+
+{%- endblock -%}
+{% block javascripts %}
+    {{- parent() -}}
+    <script>
+    $(document).ready(function(){
+        var activeDate = "{{ app.request.query.get('date') }}";
+        activeDate = new Date(activeDate);
+        var date = (activeDate.getDate() < 10) ? ('0' + activeDate.getDate()) : activeDate.getDate();
+        activeDate = $('.day' + date);
+        activeDate.closest('.active').addClass('selected');
+    });
+    function eventByDate(date) {
+        window.location.replace('?date='+date);
+    }
+    </script>
+{% endblock %}

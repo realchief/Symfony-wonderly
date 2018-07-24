@@ -1,0 +1,258 @@
+{%- extends 'AdminBundle:Default:dashboard.html.twig' -%}
+{% form_theme form _self %}
+
+{%- block stylesheets -%}
+    {% stylesheets
+        '@AdminBundle/Resources/public/scss/_bootstrap.min.scss'
+        '@AdminBundle/Resources/public/css/font-awesome.min.css'
+        '@AdminBundle/Resources/public/css/style.css'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap.wysihtml5/dist/bootstrap3-wysihtml5.min.css'
+        '@AdminBundle/Resources/public/assets/lib/jquery.icheck/skins/square/blue.css'
+        'bundles/pinanoselect2/css/select2.css'
+        '@FrontendBundle/Resources/public/css/lib/jquery-ui.min.css'
+        '@FrontendBundle/Resources/public/css/lib/jquery-ui.multidatespicker.css'
+        filter="cssrewrite"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+    {%- endstylesheets -%}
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:300,200,100" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" rel="stylesheet" type="text/css">
+    <style>
+        .ui-datepicker-inline {
+            margin-top: 50px;
+        }
+    </style>
+{%- endblock -%}
+
+{% form_theme form _self %}
+
+{% block _event_category_widget %}
+    <div id="filter_categories">
+        {% for child in form -%}
+            {% if not child.rendered %}
+                {{- form_widget(child) -}}
+                &nbsp;
+                {{- form_label(child) -}}
+                <br>
+            {% endif %}
+        {%- endfor %}
+    </div>
+{% endblock %}
+
+{% block _event_age_widget %}
+     {% for child in form -%}
+         {% if not child.rendered %}
+             {{- form_widget(child) -}}
+             &nbsp;
+             {{- form_label(child) -}}
+             <br>
+         {% endif %}
+     {%- endfor %}
+{% endblock %}
+
+{% block _event_duration_widget %}
+    <div class="input-group bootstrap-timepicker timepicker">
+        <input id="event_duration" type="text" name="event[duration]" class="form-control input-small">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+    </div>
+{% endblock %}
+
+{% block _event_eventDate_widget %}
+    <div class="hidden">
+    {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block _event_eventDateEnd_widget %}
+    <div class="hidden">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block _event_periodic_widget %}
+    <div class="hidden">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block main %}
+    <div class="col-sm-6 col-md-6">
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_row(form.organize) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.name, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group clearfix">
+            {{ form_row(form.category, {'attr':{'class':"col-md-9"}}) }}
+        </div>
+
+        <div class="form-group">
+            <div id="locationField">
+                {{ form_row(form.address, {'id':'autocomplete', 'attr':{'class':"form-control", 'onFocus':"geolocate()"}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <table id="address">
+                {{ form_row(form.zip, {'id':'postal_code','attr':{'class':"form-control"}}) }}
+            </table>
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.email, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+             {{ form_row(form.site, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.phonenumber, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.outdoor, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.description, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.price) }}&nbsp;
+            <input type="checkbox" data-toggle="toggle" data-on="Price" data-off="Free" id="price-toggle">
+            <br><br>
+            <div class="input-group price-hide hidden">
+                <span class="input-group-addon">$</span>
+                {{ form_widget(form.price, {'attr':{'class':"form-control"}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.age, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        {% include '@Frontend/Partial/periodicForm.html.twig' %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <label>Hours of Operation</label>
+            </div>
+            <div class="col-md-12 form-inline">
+                <label>Start</label>
+                <div class='input-group col-md-3 date datetimepicker3'>
+                    {{ form_widget(form.originWork, {'attr':{'class':"form-control"}}) }}
+                    <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                </div>
+                <label>End</label>
+                <div class='input-group col-md-3 date datetimepicker3'>
+                    {{ form_widget(form.finishWork, {'attr':{'class':"form-control"}}) }}
+                    <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Event time</label>
+            </div>
+            <div class="col-md-12 form-inline">
+                <label>Start</label>
+                <div class='input-group col-md-3 date datetimepicker3'>
+                    {{ form_widget(form.origin, {'attr':{'class':"form-control"}}) }}
+                    <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                </div>
+                <label>End</label>
+                <div class='input-group col-md-3 date datetimepicker3'>
+                    {{ form_widget(form.finish, {'attr':{'class':"form-control"}}) }}
+                    <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group">
+            {{ form_row(form.food, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.tips, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.recommend, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+    <input type="submit">
+
+    {{ form_end(form) }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {% javascripts
+        '@AdminBundle/Resources/public/assets/lib/jquery/jquery.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.js'
+        '@AdminBundle/Resources/public/assets/js/cleanzone.js'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap/dist/js/bootstrap.min.js'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap.switch/js/bootstrap-switch.js'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap.datetimepicker/js/bootstrap-datetimepicker.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.icheck/icheck.min.js'
+        '@AdminBundle/Resources/public/assets/js/page-form-elements.js'
+        '@PinanoSelect2Bundle/Resources/public/js/select2.min.js'
+        '@PinanoSelect2Bundle/Resources/public/js/i18n/en.js'
+        '@FrontendBundle/Resources/public/js/lib/moment.min.js'
+        '@FrontendBundle/Resources/public/js/eventDate.js'
+        '@FrontendBundle/Resources/public/js/googlemaps.js'
+        '@FrontendBundle/Resources/public/js/lib/jquery-ui.min.js'
+        '@FrontendBundle/Resources/public/js/lib/jquery-ui.multidatespicker.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            changeDateToggleAndResetFields('#event_periodic', '#event_eventDate', '#event_eventDateEnd');
+            eventFormDateSave();
+            preSubmit('event', '#event_periodic', '#event_eventDate', '#event_eventDateEnd');
+            $('.datetimepicker3').datetimepicker({
+                format: 'LT',
+            });
+            $('#price-toggle').change(function() {
+                 if ($(this).prop('checked') === true) {
+                     $('.price-hide').removeClass('hidden');
+                 } else {
+                     $('.price-hide').addClass('hidden');
+                     $('#event_price').val('')
+                 }
+             });
+
+            App.init();
+            $('#event_organize').select2();
+        });
+    </script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initAutocomplete"
+        async defer></script>
+
+
+{% endblock %}
+

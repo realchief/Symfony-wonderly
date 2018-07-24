@@ -1,0 +1,75 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+
+{% block body %}
+<body class="login">
+<div class="login-form">
+    <div class="login-logo">
+        Wonderly
+    </div>
+
+    <h2>More fun for <br>
+        your family</h2>
+
+    <div class="login-social">
+        <div class="login-btn login-btn-fb" style="cursor: pointer" onclick="facebook_click()" id="fbLogin">
+            Continue with Facebook
+        </div>
+        <div id="gSignInWrapper">
+            <div class="login-btn login-btn-gp" style="cursor: pointer" id="googleLogin">
+                Continue with Google
+            </div>
+        </div>
+
+        <div class="login-or">
+            OR
+        </div>
+
+        <a class="login-btn login-btn-red" href="{{ path('fos_user_registration_register') }}">
+            Create Account
+        </a>
+
+        <div class="login-note have-account">
+            Already have an Account? <a href="{{ path('fos_user_security_login') }}">Login</a>
+        </div>
+    </div>
+
+    <div class="login-note">
+        By using Wonderly you agree to our
+        <a style="cursor: pointer" data-toggle="modal" data-target="#termsOfUse">Terms of Use</a> and
+        <a style="cursor: pointer" data-toggle="modal" data-target="#termsOfUse">Privacy Policy</a>
+    </div>
+
+</div>
+{% include '@Frontend/Partial/privacyPolicyTermsOfUse.html.twig' %}
+
+</body>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    {% javascripts
+    '@FrontendBundle/Resources/public/js/lib/socialApi.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        socialApiKey("{{ google_social_api_key }}", "{{ facebook_social_api_key }}");
+        function sendSocialData(profile) {
+            $.ajax({
+                url: "{{ path('frontend_user_apisocial') }}",
+                type: 'POST',
+                data: {profile: profile},
+                success: function (response) {
+                    if (response === 'success') {
+                        window.location.replace("{{ path('frontend_default_index') }}")
+                    } else {
+                        console.log(response);
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}

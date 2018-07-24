@@ -1,0 +1,20 @@
+services:
+  FrontendBundle\Form\FilterType:
+    arguments:
+      - '@doctrine.orm.default_entity_manager'
+      - '@Component\Locator\AddressResolverInterface'
+    tags:
+      - { name: 'form.type' }
+
+  app.blog:
+    class: 'FrontendBundle\Services\GetBlog'
+    arguments:
+      - '@service_container'
+      - 'FrontendBundle\Entity\Post'
+
+  app.form.flow.createVehicle:
+    class: 'FrontendBundle\Form\CreateVehicleFlow'
+    parent: craue.form.flow
+
+  app.nearest.date:
+    class: 'FrontendBundle\Services\GetNearestDate'

@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d
+      - ../:/code
+    ports:
+      - 8080:80
+    depends_on:
+      - php
+
+  php:
+    build: ./php-fpm
+    environment:
+      PHP_IDE_CONFIG: "serverName=Wonderly"
+    volumes:
+      - ../:/code
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wonderly
+    volumes:
+      - ./mysql/data:/var/lib/mysql

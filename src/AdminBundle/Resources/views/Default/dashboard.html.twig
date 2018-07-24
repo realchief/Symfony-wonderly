@@ -1,0 +1,99 @@
+{%- extends 'AdminBundle::admin_layout.html.twig' -%}
+
+{% block content %}
+<body>
+<div id="head-nav" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="fa fa-gear"></span></button>
+            <a class="navbar-brand" style="background: none"><span>Wonderly Admin</span></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="{{ path('admin_default_dashboard') }}">Home</a></li>
+            <ul class="nav navbar-nav navbar-right user-nav">
+                <li class="dropdown profile_menu"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><!--<img alt="Avatar" src="assets/img/avatar2.jpg">--><span>User</span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('fos_user_security_logout') }}">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="cl-wrapper">
+    <!--Sidebar item function-->
+    <!--Sidebar sub-item function-->
+    <div class="cl-sidebar">
+        <div class="cl-toggle"><i class="fa fa-bars"></i></div>
+        <div class="cl-navblock">
+
+                <div class="menu-space">
+                    <div class="content">
+                        <div class="side-user">
+                            <div class="info">
+
+                            </div>
+                        </div>
+                        {% block side_navigation %}
+                        <ul class="cl-vnavigation">
+                            <li><a href="#"><i class="fa fa-file"></i><span>Events</span></a>
+                                <ul class="sub-menu">
+                                    <!-- event create -->
+                                    <li class=""><a href="{{ path('admin_event_eventcreate') }}">Create event</a>
+                                    </li>
+                                    <!-- event list -->
+                                    <li class=""><a href="{{ path('admin_event_eventlist') }}">Event list</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_event_import') }}">Event Import</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><i class="fa fa-file"></i><span>Customers</span></a>
+                                <ul class="sub-menu">
+                                    <!-- organize registration -->
+                                    <li class=""><a href="{{ path('admin_user_userregister') }}">Register Organizer</a>
+                                    </li>
+                                    <!-- organize list -->
+                                    <li class=""><a href="{{ path('admin_user_userorganizerslist') }}">Organizers list</a>
+                                    </li>
+                                    <!-- user list -->
+                                    <li class=""><a href="{{ path('admin_user_useruserlist') }}">User list</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><i class="fa fa-file"></i><span>Advertisement</span></a>
+                                <ul class="sub-menu">
+                                    <!-- advt create -->
+                                    <li class=""><a href="{{ path('admin_advt_create') }}">Create Advt</a>
+                                    </li>
+                                    <!-- advt list -->
+                                    <li class=""><a href="{{ path('admin_advt_list') }}">List Advt</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        {% endblock %}
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    {% block header_navigation %}
+    <div id="pcont" class="container-fluid">
+        <div class="page-head">
+            <ol class="breadcrumb">
+            </ol>
+        </div>
+        {% endblock %}
+        {% block main %}
+        <div class="cl-mcont">
+            <h3 class="text-center">Hello!</h3>
+        </div>
+        {% endblock %}
+    </div>
+</div>
+</body>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Wonderly{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        {% block metatags %}
+            <link rel="icon" type="image/x-icon" href="{{ asset('main_logo.png') }}" />
+            <link rel="manifest" href="{{ asset('manifest.json') }}">
+            <link rel="icon" sizes="192x192" href="{{ asset('launcher-icon-4x.png') }}">
+            <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+        {% endblock %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-17383051-7"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-17383051-7');
+        </script>
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,81 @@
+{%- extends 'AdminBundle:Default:dashboard.html.twig' -%}
+    {%- block stylesheets -%}
+        {% stylesheets
+        '@AdminBundle/Resources/public/scss/_bootstrap.min.scss'
+        '@AdminBundle/Resources/public/css/font-awesome.min.css'
+        '@AdminBundle/Resources/public/css/style.css'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap.wysihtml5/dist/bootstrap3-wysihtml5.min.css'
+        filter="cssrewrite"
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%- endstylesheets -%}
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Raleway:300,200,100" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" rel="stylesheet" type="text/css">
+
+    {%- endblock -%}
+
+{% block main %}
+    <div class="col-sm-6 col-md-6">
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_row(form.email, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.firstname, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.lastname, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            <img src="{{ asset('uploads/image/') ~ organizer.img }}" style="width: 10em">
+            {{ form_row(form.organize.img) }}
+        </div><a href="{{ path('admin_user_userorganizersimgdelete', {'id':organizer.id}) }}">Delete</a>
+
+        <div class="form-group">
+            {{ form_row(form.organize.age, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.organize.location, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.organize.address, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.organize.profession, {'attr':{'class':"form-control"}}) }}
+        </div>
+
+        <input type="submit">
+
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    {% javascripts
+    '@AdminBundle/Resources/public/assets/lib/jquery/jquery.min.js'
+    '@AdminBundle/Resources/public/assets/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.js'
+    '@AdminBundle/Resources/public/assets/js/cleanzone.js'
+    '@AdminBundle/Resources/public/assets/lib/bootstrap/dist/js/bootstrap.min.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            //initialize the javascript
+            App.init();
+        });
+
+    </script>
+
+{% endblock %}

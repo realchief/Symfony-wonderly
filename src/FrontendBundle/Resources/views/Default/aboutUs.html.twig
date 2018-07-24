@@ -1,0 +1,329 @@
+{%- extends '@Frontend/frontend_layout.html.twig' -%}
+
+{%- block stylesheets -%}
+        {{ parent() }}
+        {% stylesheets
+        '@FrontendBundle/Resources/public/css/lib/arthref.css'
+        filter="cssrewrite"
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%- endstylesheets -%}
+{%- endblock stylesheets -%}
+
+{%- block main -%}
+<style>
+.background-ultra-light-gray.darker {
+	background-color: #EF6461 !important;
+	color: white;
+}
+#footer, .box-arrow, .jumbotron.jumbotron-with-page-arrow, .page-section.page-section-with-arrow {
+    position: relative;
+}
+.page-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+    text-align: center;
+}
+.box-arrow::before, .jumbotron.jumbotron-with-page-arrow::before, .page-section.page-section-with-arrow::before {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    margin-top: -15px;
+    margin-left: -15px;
+}
+.box-arrow-small::before, .box-arrow::before, .jumbotron.jumbotron-with-page-arrow::before, .page-section.page-section-with-arrow::before {
+    content: "";
+    transform: rotate(45deg);
+    background-color: inherit;
+    top: 100%;
+    left: 50%;
+    border-left-width: 0;
+    border-top-width: 0;
+    z-index: 1;
+}
+*, ::after, ::before {
+    box-sizing: inherit;
+}
+.background-ultra-light-gray {
+    background-color: white !important;
+}
+.page-section.page-section-small {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+#footer, .box-arrow, .jumbotron.jumbotron-with-page-arrow, .page-section.page-section-with-arrow {
+    position: relative;
+}
+.page-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+    text-align: center;
+}
+.jumbotron-title.display-1 {
+	text-align: center;
+	font-size: 40px;
+	font-family: "Roboto Slab",Museo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.col-md.content-wrapper {
+	text-align: center;
+}
+.page-section.page-section-small .page-section-title {
+	font-size: 1.25rem;
+	font-weight: 400;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+	font-family: "Roboto Slab",Museo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.page-section.page-section-narrow > .container {
+	max-width: 83rem;
+}
+.page-section-headline.col-6 {
+	width: 50%;
+	float: right;
+}
+.small-button-style-outline .sqs-block-button .sqs-block-button-element--small, .medium-button-style-outline .sqs-block-button .sqs-block-button-element--medium, .large-button-style-outline .sqs-block-button .sqs-block-button-element--large, .small-button-style-outline .sqs-alternate-block-style-container .sqs-block-button .sqs-block-button-element--small, .medium-button-style-outline .sqs-alternate-block-style-container .sqs-block-button .sqs-block-button-element--medium, .large-button-style-outline .sqs-alternate-block-style-container .sqs-block-button .sqs-block-button-element--large {
+	border-width: 2px;
+	border-style: solid;
+	background-color: transparent;
+	-webkit-transition: 0.1s background-color linear, 0.1s color linear;
+	-moz-transition: 0.1s background-color linear, 0.1s color linear;
+	-o-transition: 0.1s background-color linear, 0.1s color linear;
+	transition: 0.1s background-color linear, 0.1s color linear;
+}
+.sqs-block-button .sqs-block-button-container--center {
+	text-align: center;
+}
+.medium-button-style-outline .sqs-block-button .sqs-block-button-element--medium {
+	color: #fff;
+}
+.sqs-block-button .sqs-block-button-element--medium {
+	padding: 21px 34px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight: 600;
+	letter-spacing: 1px;
+	font-family: futura-pt;
+	font-size: 15px;
+	font-weight: 700;
+	font-style: normal;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	background-color: #fff;
+	color: #EF6461;
+	border: 2px #EF6461 solid;
+	position: relative;
+	display: inline-block;
+}
+.col.sqs-col-3.span-3 {
+	width: 24%;
+}
+.col.sqs-col-2.span-2 {
+	width: 17%;
+}
+.sqs-layout:not(.sqs-editing) > .sqs-row:first-child > [class*="sqs-col"]:first-child > .sqs-block:last-child, .sqs-layout:not(.sqs-editing) .sqs-block + .sqs-row .sqs-block:not(.float):last-child {
+	padding-bottom: 17px;
+}
+.sqs-layout:not(.sqs-editing) .sqs-block + .sqs-row .sqs-block:not(.float):first-child {
+	padding-top: 17px;
+}
+.sqs-block:not(.sqs-block-html):not(.sqs-block-markdown) {
+	clear: both;
+}
+[class*="sqs-col"] .sqs-block {
+	padding-left: 17px;
+	padding-right: 17px;
+}
+.sqs-block {
+	position: relative;
+	height: auto;
+	padding-top: 17px;
+	padding-bottom: 17px;
+	outline: none;
+	box-shadow: inset 0 0 0 1px rgba(128,128,128,0);
+	transition: box-shadow .2s ease-in-out;
+}
+.parallax-item[data-url-id="about-contact"] .content .sqs-layout .sqs-col-12 .sqs-col-2 {
+    width: 20% !important;
+}
+.sqs-col-12 .sqs-col-2 {
+    width: 16.6667%;
+}
+.sqs-col-2 {
+    width: 16.6667%;
+}
+[class*="sqs-col"] {
+    float: left;
+}
+
+@media only screen and (max-width: 996px) {
+   .col.sqs-col-3.span-3 {
+	width: 100%;
+}
+.col.sqs-col-2.span-2 {
+	width: 100%;
+}
+}
+</style>
+<header class="js-handle-banner js-id-13275" style="padding:45px 0px;background:white;color: #EF6461;">
+    <div class="container">
+        <div class="row ">
+            <div class="col-md  content-wrapper">
+                <h1 class="jumbotron-title display-1">
+                    <p>The Wonderly Story</p>
+                </h1>
+                <h5 class="jumbotron-subtitle">
+                    <p style='font-size:20px;'>
+We wanted something better for families.
+					</p>
+                </h5>
+            </div>
+        </div>
+        <div class="overlay"></div>
+    </div>
+    <div class="jumbotron-overlay"></div>
+</header>
+<div class="page-section-wrapper">
+    <div class="page-section-anchor" id="at-moz-we-believe-there-is-a-better-way-to-do-marketing.-a-more-valuable-less-invasive-way-where-customers-are-earned-rather-than-bought.-were-obsessively-passionate-about-it-and-our-mission-is-to-help-people-achieve-it.-we-focus-on-search-engine-optimization-seo.-its-one-of-the-least-understood-and-least-transparent-aspects-of-great-marketing-and-we-see-that-as-an-opportunity-were-excited-to-simplify-seo-for-everyone-through-our-software-education-and-community."></div>
+    <div class="page-section  darker page-section-at-moz-we-believe-there-is-a-better-way-to-do-marketing.-a-more-valuable-less-invasive-way-where-customers-are-earned-rather-than-bought.-were-obsessively-passionate-about-it-and-our-mission-is-to-help-people-achieve-it.-we-focus-on-search-engine-optimization-seo.-its-one-of-the-least-understood-and-least-transparent-aspects-of-great-marketing-and-we-see-that-as-an-opportunity-were-excited-to-simplify-seo-for-everyone-through-our-software-education-and-community. page-section-small page-section-with-arrow page-section-narrow js-handle-pageSection js-id-14039 background-ultra-light-gray" style="">
+        <div class="container">
+            <div class="page-section-headline">
+			
+               
+                    <p style='font-size:2rem;'>At Wonderly we believe there is a better way to find fun things to do. A simpler, user friendly way where parents can always have an option for activities. We're obsessively passionate about it, and our mission is to help make a parent's life easier. We focus on curating amazing local businesses and events. One of the most challenging things for any parent is to find activities to do as a whole family and we saw that as a problem we could solve. We're excited to simplify local events to the touch of your fingertips through our web app and blog.</p>
+           
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section-wrapper">
+    <div class="page-section js-handle-pageSection js-id-13827 background-ultra-light-gray " style="">
+        <div class="container">
+            <div class="row">
+                <div  style='float:left;' class="col-12 col-lg-5  align-self-center left">
+				<img style='width:100%;' src="{{ asset('Resources/public/img/aboutus/1.jpeg') }}" alt="" class="hidden-md-down"></div>
+                <div   class="col-12 col-lg-6 offset-lg-1 text-left">
+                    <div class="page-section-headline">
+                        <h2 class="page-section-title">
+                            <p>
+							Dean Briones & Pari Azari
+</p>
+                        </h2><h4>Our Founders</h4>
+                    </div>
+                    <div class="page-section-body">
+                        <p>
+						Wonderly was founded by husband and wife team Dean Briones and Pari Azari - who currently live in Petaluma. Raised in Texas, Dean has a background in healthcare, technology and import/export. Pari is locally grown out of Marin with a background in medicine. Dean and Pari realized there was a need to have an organized solution of the awesome events around Sonoma County. Through a lot of hard work and effort, Wonderly came to life as that solution. Happily busy with two munchkins, Dean & Pari started Wonderly in North bay with goals expand to other cities over the coming months.
+</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section-wrapper">
+    <div class="page-section darker page-section-with-arrow js-handle-pageSection js-id-13823 background-ultra-light-gray" style="">
+        <div class="container">
+            <div class="row row-reverse">
+                <div  style='float:right;' class="col-12 col-lg-5 offset-md-1 align-self-center right">
+				
+				<img style='width:100%;' src="{{ asset('Resources/public/img/aboutus/2.jpg') }}" alt="" class="hidden-md-down">
+				
+				
+				</div>
+                <div class="col-12 col-lg-6 text-left">
+                    <div class="page-section-headline">
+                        <h2 class="page-section-title">
+                            <p>Megan Cusimano.
+ </p>
+                        </h2><h4>Chief Amazement Officer. </h4>
+                    </div>
+                    <div class="page-section-body">
+                        <p>Megan is quite the amazing mom with a loving husband and 4 beautiful children. As a Bay Area native, Megan lived in Berkeley while attending CAL then lived in San Francisco and worked in Marin before moving up to Petaluma. Coming from a family of educators, Megan has previously been a middle school assistant principal and she is currently president of the awesome group, Petaluma Mothers' Club. With a passion for community, family, and smiling, Megan brings a full dose of amazement to basically every conversation or event. If you haven't had a chance to meet her, her energy and smile will definitely brighten up your day.
+						</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-section-wrapper">
+    <div class="page-section-anchor" id="interested-in-our-latest-chapter"></div>
+    <div class="page-section page-section-interested-in-our-latest-chapter js-handle-pageSection js-id-24749 background-ultra-light-gray " style="">
+        <div class="container">
+            <div class="row">
+    <div class="page-section-headline col-6">
+        <h2 class="page-section-title">
+            <p>Our mission.</p>
+        </h2>
+        <p class="page-section-subtitle">Wonderly is a catalyst for parents to find fun events for their families.</p>
+    </div>
+    <div class="page-section-headline col-6">
+        <h2 class="page-section-title">
+            <p>Our promise</p>
+        </h2>
+        <p class="page-section-subtitle">We deliver consistent, unique, and curated content to our audience of smart, curious, and multi-tasking parents.</p>
+    </div>
+    <div class="page-section-headline col-6">
+        <h2 class="page-section-title">
+            <p>Our vibe.</p>
+        </h2>
+        <p class="page-section-subtitle">At Wonderly, we make magic. We curate it and showcase it - for parents - everyday finding amazing things to do.</p>
+    </div>
+    <div class="page-section-headline col-6">
+        <h2 class="page-section-title">
+            <p>Our core.</p>
+        </h2>
+        <p class="page-section-subtitle">Wonderly runs on creativity, imagination, fun, and laughter.</p>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+<div class="page-section-wrapper">
+    <div class="page-section-anchor" id="interested-in-our-latest-chapter"></div>
+    <div class="page-section darker page-section-interested-in-our-latest-chapter js-handle-pageSection js-id-24749 background-ultra-light-gray " style="">
+        <div class="container"><h1>Contact Us</h1>
+            <div class="row sqs-row">
+    <div class="col sqs-col-3 span-3">
+        <div class="sqs-block spacer-block sqs-block-spacer sized vsize-1" data-block-type="21" id="block-yui_3_17_2_85_1492118447794_13348">
+            <div class="sqs-block-content">&nbsp;</div>
+        </div>
+    </div>
+    <div class="col sqs-col-2 span-2">
+        <div class="sqs-block button-block sqs-block-button" data-block-type="53" id="block-yui_3_17_2_5_1505833837105_6721">
+            <div class="sqs-block-content" id="yui_3_17_2_1_1520633666528_473">
+                <div class="sqs-block-button-container--center" data-alignment="center" data-button-size="medium" id="yui_3_17_2_1_1520633666528_472">
+                    <a href="mailto:hello@gowonderly.com" class="sqs-block-button-element--medium sqs-block-button-element" data-initialized="true">Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col sqs-col-2 span-2">
+        <div class="sqs-block button-block sqs-block-button" data-block-type="53" id="block-yui_3_17_2_46_1492118447794_41042">
+            <div class="sqs-block-content" id="yui_3_17_2_1_1520633666528_481">
+                <div class="sqs-block-button-container--center" data-alignment="center" data-button-size="medium" id="yui_3_17_2_1_1520633666528_480">
+                    <a href="{{ path('advertise_with_us') }}" class="sqs-block-button-element--medium sqs-block-button-element" data-initialized="true">Advertise</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col sqs-col-2 span-2">
+        <div class="sqs-block button-block sqs-block-button" data-block-type="53" id="block-yui_3_17_2_46_1492118447794_42966">
+            <div class="sqs-block-content" id="yui_3_17_2_1_1520633666528_489">
+                <div class="sqs-block-button-container--center" data-alignment="center" data-button-size="medium" id="yui_3_17_2_1_1520633666528_488">
+                    <a href="#" class="sqs-block-button-element--medium sqs-block-button-element" data-initialized="true">Careers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col sqs-col-3 span-3">
+        <div class="sqs-block spacer-block sqs-block-spacer sized vsize-1" data-block-type="21" id="block-yui_3_17_2_85_1492118447794_14200">
+            <div class="sqs-block-content">&nbsp;</div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+{%- endblock main -%}
+
+

@@ -1,0 +1,88 @@
+{%- extends 'AdminBundle:Default:dashboard.html.twig' -%}
+
+    {%- block stylesheets -%}
+        {% stylesheets
+        '@AdminBundle/Resources/public/scss/_bootstrap.min.scss'
+        '@AdminBundle/Resources/public/css/font-awesome.min.css'
+        '@AdminBundle/Resources/public/css/style.css'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap.wysihtml5/dist/bootstrap3-wysihtml5.min.css'
+        '@AdminBundle/Resources/public/assets/lib/jquery.datatables/plugins/bootstrap/3/dataTables.bootstrap.css'
+        filter="cssrewrite"
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%- endstylesheets -%}
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Raleway:300,200,100" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" rel="stylesheet" type="text/css">
+        <style>
+            table {
+                table-layout: fixed;
+            }
+            table.table-bordered tbody th, table.table-bordered tbody td {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        </style>
+    {%- endblock -%}
+
+{% block main %}
+
+    <div class="admin_table container">
+        <table id="admin_event_table" data-action-obj="eventActions" data-searching="0" class="table table-bordered">
+            <thead>
+            <tr>
+                <th data-property="createDate" data-sort-name="Event.createDate">Created Date</th>
+                <th data-property="organize.user.email" data-sort-name="Organizer.user">Organizer Email</th>
+                <th data-property="name" data-sort-name="Event.name">Name</th>
+                <th data-property="address" data-sort-name="Event.address">Address</th>
+                <th data-property="email" data-sort-name="Event.email">Email</th>
+                <th data-property="zip" data-sort-name="Event.zip">ZIP</th>
+                <th data-property="site" data-sort-name="Event.site">Site</th>
+                <th data-property="phonenumber" data-sort-name="Event.phonenumber">Phone number</th>
+                <th data-property="price" data-sort-name="Event.price">Price</th>
+                <th data-property="action">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    {% javascripts
+    '@AdminBundle/Resources/public/assets/lib/jquery/jquery.min.js'
+    '@AdminBundle/Resources/public/assets/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.js'
+    '@AdminBundle/Resources/public/assets/js/cleanzone.js'
+    '@AdminBundle/Resources/public/assets/lib/bootstrap/dist/js/bootstrap.min.js'
+    '@AdminBundle/Resources/public/assets/lib/jquery.datatables/js/jquery.dataTables.min.js'
+    '@AdminBundle/Resources/public/assets/lib/jquery.datatables/plugins/bootstrap/3/dataTables.bootstrap.js'
+    '@AdminBundle/Resources/public/assets/js/page-data-tables.js'
+    '@AdminBundle/Resources/public/assets/js/page-form-elements.js'
+    '@AdminBundle/Resources/public/assets/lib/bootstrap.datetimepicker/js/bootstrap-datetimepicker.min.js'
+    '@AdminBundle/Resources/public/assets/lib/bootstrap.switch/js/bootstrap-switch.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        var table;
+        var searchForm = $('#search-form');
+        $(document).ready(function(){
+            App.init();
+            App.formElements();
+
+            table = App.initializeDataTable('#admin_event_table', {
+                "pageLength": 100,
+                ajax: {
+                    url: '{{- path('admin_event_eventlist') -}}',
+                    data: App.createSerializeFormFn(searchForm)
+                }
+            });
+        });
+
+    </script>
+
+{% endblock %}

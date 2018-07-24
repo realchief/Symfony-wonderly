@@ -1,0 +1,76 @@
+<div class="categories">
+    <div class="container">
+        {#<a href="#" class="watch-more">Watch all</a>#}
+        <h3 class="section-title">Upcoming Events</h3>
+        {% set count = 0 %}
+        <div class="news-wrapper">
+            <div class="owl-carousel news-carousel">
+                {% for lastNew in lastNews %}
+                    {% set count = count + 1 %}
+                    {% if count == 2 %}
+                        {% if getAdvertisement(1) %}
+                            <div class="col-md-12 category-wrapper adv-lastNews">
+                                {{ getAdvertisement(1)| raw }}
+                            </div>
+                        {% endif %}
+                        {% set count = 3 %}
+                    {% endif %}
+                    {% if count == 6 %}
+                        {% if getAdvertisement(1) %}
+                            <div class="col-md-12 category-wrapper adv-lastNews">
+                                {{ getAdvertisement(1)| raw }}
+                            </div>
+                        {% endif %}
+                        {% set count = 3 %}
+                    {% endif %}
+                <div class="col-md-12 category-wrapper">
+                    <div class="category category-main"
+                        {% if lastNew.imageEvent.toArray is empty %}
+                        style="background-image: url({{ asset('Resources/public/img/event-img.jpg') }})"
+                        {% else %}
+                            {% set image = lastNew.imageEvent.toArray | first %}
+                        style="background-image: url({{ image.picture }})"
+                        {% endif %}>
+                        <div class="cat-actions">
+                            <a class="event-like addFavoriteEvent"
+                               event="{{ lastNew.id }}" style="cursor: pointer"
+                               {% if lastNew.liked %}checked{% endif %}>
+                            </a>
+                            <a style="cursor:pointer" class="event-share"
+                               onclick="showModalShare('{{ absolute_url(path('frontend_event_eventshow', {'slug':lastNew.name | slugify, 'id': lastNew.id })) }}', '{{ lastNew.name }}')">
+                                <i class="fa fa-share-alt"></i>
+                            </a>
+                        </div>
+                        <h3 class="category-title">
+                            {% if lastNew.name != null %}
+                                {% if lastNew.name | length > 30 %}
+                                    <a href="{{ path('frontend_event_eventshow', {'slug':lastNew.name | slugify, 'id': lastNew.id }) }}"
+                                       data-toggle="tooltip" title="{{ lastNew.name }}" target="_blank">
+                                        {{ lastNew.name [:30] }}...</a>
+                                {% else %}
+                                    <a href="{{ path('frontend_event_eventshow', {'slug':lastNew.name | slugify, 'id': lastNew.id }) }}" target="_blank">
+                                        {{ lastNew.name }}
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </h3>
+                        <div class="category-posts-count">
+                            {{ lastNew.eventDate | nearestDate(lastNew.eventDateEnd, lastNew.periodic.toArray) }}
+                            {% if lastNew.origin %}
+                                {{ lastNew.origin | date ('g:i a') }}
+                            {% endif %}
+                        </div>
+                        <div class="category-posts-count">
+                            {% if lastNew.shortAddress %}
+                                <span data-toggle="tooltip" data-placement="top" style="cursor: pointer" title="{{ lastNew.address }}">
+                                    {{ lastNew.shortAddress }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+
+{% block body %}
+    <body class="login">
+        <div class="login-form">
+            <div class="login-logo">
+                Wonderly
+            </div>
+            <h2>More fun for <br>
+                your family</h2>
+
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashBag.all %}
+                    {% for message in messages %}
+                        <div class="{{ type }}">
+                            {{ message|trans({}, 'FOSUserBundle') }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            {% block fos_user_content %}
+                {% if error %}
+                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+                <form role="form" action="{{ path("fos_user_security_check") }}" method="post">
+                    <div class="login-fields">
+                        {% if csrf_token %}
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                        {% endif %}
+                        <div class="login-field">
+                            <input type="text" id="username" name="_username" value="{{ last_username }}"
+                                   required="required" placeholder="Enter your email"/>
+                        </div>
+                        <div class="login-field">
+                            <input type="password" id="password" name="_password"
+                               required="required" placeholder="Enter your password"/>
+                        </div>
+                        {#<input type="checkbox" id="remember_me" name="_remember_me" value="on" />#}
+                        {#<label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>#}
+
+                        {#<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />#}
+                        <div class="login-field">
+                            <button type="submit" id="_submit" name="_submit">
+                                Login
+                            </button>
+                        </div>
+
+                        <div class="login-field login-links clearfix">
+                            <a href="{{ path('fos_user_resetting_request') }}" class="pull-left">
+                                Forgot password?
+                            </a>
+
+                            <a href="{{ path('fos_user_registration_register') }}" class="pull-right">
+                                Create account
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="login-note">
+                        By using Wonderly you agree to our
+                        <a style="cursor: pointer" data-toggle="modal" data-target="#termsOfUse">Terms of Use</a> and
+                        <a style="cursor: pointer" data-toggle="modal" data-target="#termsOfUse">Privacy Policy</a>
+                    </div>
+                </form>
+            {% endblock fos_user_content %}
+        </div>
+    {% include '@Frontend/Partial/privacyPolicyTermsOfUse.html.twig' %}
+    </body>
+
+{% endblock %}

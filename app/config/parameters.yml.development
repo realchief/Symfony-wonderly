@@ -1,0 +1,30 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host: 127.0.0.1
+    database_port: ~
+    database_name: wonderly_demo
+    database_user: wonderly_demo
+    database_password: ma4TohCh7s
+    # You should uncomment this if you want to use pdo_sqlite
+    #database_path: '%kernel.project_dir%/var/data/data.sqlite'
+
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: ~
+    mailer_password: ~
+
+    # A secret key that's used to generate certain security-related tokens
+    secret: ThisTokenIsNotSoSecretChangeIt
+    google_maps_api_key: AIzaSyCKuTUVurLtQR2wrMbbL0t0wH_0jTXOGnA
+    google_social_api_key: 752740158738-q013tga774e4r26utos6vdu1lgitnq5p.apps.googleusercontent.com
+    facebook_social_api_key: 360189491070979
+    event_image_directory: uploads/image
+    wonder_blog_url: http://blog.wonderly.dev7.sibers.com
+
+    mailer_sender_address: noreplay@gowonderly.com
+    mailer_sender_name: wonderly
+
+    mailchimp_api_key: 380efc938af17bc5a1fae9a952c7a9e7-us12
+    mailchimp_api_list: c6c74c6932

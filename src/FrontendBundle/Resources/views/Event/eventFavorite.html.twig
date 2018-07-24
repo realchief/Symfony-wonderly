@@ -1,0 +1,120 @@
+{%- extends '@Frontend/frontend_layout.html.twig' -%}
+
+{%- block stylesheets -%}
+    {{ parent() }}
+    {% stylesheets
+    '@FrontendBundle/Resources/public/css/lib/arthref.css'
+    filter="cssrewrite"
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {%- endstylesheets -%}
+{%- endblock stylesheets -%}
+
+{%- block main -%}
+
+<div class="events-list">
+    <div class="container">
+        <h3 class="section-title" style="margin-top: 50px">
+            You saved
+        </h3>
+        {% if allEvents.count == 0 %}
+            <h3>
+                Boo. No events with these filters, please change the filters and try again.
+            </h3>
+        {% endif %}
+        <div class="row">
+            {% for event in allEvents %}
+                <div class="col-md-3 event-box-wrapper">
+                    <div class="event-box">
+                        <div class="event-box-top">
+                            <!-- Event Images -->
+                            {% if event.imageEvent.toArray is empty %}
+                                <img src="{{ asset('Resources/public/img/event-img.jpg')  }}">
+                            {% else %}
+                                {% set count = 1 %}
+                                {% for image in event.imageEvent.toArray if count < 2 %}
+                                    {% if image.img != null %}
+                                        <img src="{{ asset('uploads/image/') ~ image.img  }}">
+                                    {% else %}
+                                        <img src="{{ image.url }}">
+                                    {% endif %}
+                                    {% set count = count + 1 %}
+                                {% endfor %}
+                            {% endif %}
+                            <div class="cat-actions">
+                                <a class="event-like addFavoriteEvent"
+                                   event="{{ event.id }}" style="cursor: pointer"
+                                   {% if event.liked %}checked{% endif %} >
+                                </a>
+                            </div>
+                        </div>
+                        <div class="event-box-info">
+                            <h3>
+                                {% if event.name != null %}
+                                    {% if event.name | length > 35 %}
+                                        <a href="{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}"
+                                           data-toggle="tooltip" title="{{ event.name }}">
+                                            {{ event.name [:35] }}...</a>
+                                    {% else %}
+                                        <a href="{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}">
+                                            {{ event.name }}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </h3>
+
+                            <!-- Event Origin -->
+                            {% if event.origin == null %}
+
+                            {% else %}
+                                <div class="event-box-date">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    {{ event.origin | date ('H:i') }}
+                                </div>
+                            {% endif %}
+                            <!-- Event Address -->
+                            {% if event.address == null %}
+
+                            {% else %}
+                                <div class="event-box-date">
+                                    <i class="glyphicon glyphicon-map-marker"></i>
+                                    {% if event.address | length > 30 %}
+                                        <span data-toggle="tooltip"
+                                              style="cursor: pointer" title="{{ event.address }}">
+                                                                              {{ event.address [:30] }}...
+                                                                              </span>
+                                    {% else %}
+                                        <span>{{ event.address }}</span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="navigation">
+            {{ knp_pagination_render(allEvents) }}
+        </div>
+    </div>
+</div>
+{%- endblock main -%}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/js/addFavorite.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(document).ready(function () {
+            checkedFavoriteEvents(
+                'addFavoriteEvent',
+                '<i class="fa fa-heart-o"></i>',
+                '<i class="fa fa-heart" style="color: #ef6461"></i>',
+                '{{ path('frontend_event_apieventfavorite') }}'
+            )
+        });
+    </script>
+{% endblock %}

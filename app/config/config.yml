@@ -1,0 +1,152 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+
+framework:
+    #esi: ~
+    translator: { fallbacks: ['%locale%'] }
+    secret: '%secret%'
+    router:
+        resource: '%kernel.project_dir%/app/config/routing.yml'
+        strict_requirements: ~
+    form: ~
+    csrf_protection: ~
+    validation: { enable_annotations: true }
+    #serializer: { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale: '%locale%'
+    trusted_hosts: ~
+    session:
+        # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id: session.handler.native_file
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+    fragments: ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    cache: false
+    globals:
+        google_maps_api_key: '%google_maps_api_key%'
+        google_social_api_key: '%google_social_api_key%'
+        facebook_social_api_key: '%facebook_social_api_key%'
+        wonder_blog_url: '%wonder_blog_url%'
+
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+
+        types:
+            # Spatial types.
+            point: 'CrEOF\Spatial\DBAL\Types\Geometry\PointType'
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        dql:
+            numeric_functions:
+                # Spatial functions
+                X: 'CrEOF\Spatial\ORM\Query\AST\Functions\MySql\X'
+                Y: 'CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Y'
+
+                # Math functions
+                atan2: DoctrineExtensions\Query\Mysql\Atan2
+                power: DoctrineExtensions\Query\Mysql\Power
+                sin: DoctrineExtensions\Query\Mysql\Sin
+                cos: DoctrineExtensions\Query\Mysql\Cos
+                radians: DoctrineExtensions\Query\Mysql\Radians
+                hour: DoctrineExtensions\Query\Mysql\Hour
+                acos: DoctrineExtensions\Query\Mysql\Acos
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host: '%mailer_host%'
+    username: '%mailer_user%'
+    password: '%mailer_password%'
+    spool: { type: memory }
+
+assetic:
+    debug: "%kernel.debug%"
+    use_controller: "%kernel.debug%"
+    bundles:
+      - 'AdminBundle'
+      - 'FrontendBundle'
+    filters:
+        cssrewrite: ~
+    assets:
+        commonJS:
+            inputs:
+                - '@FrontendBundle/Resources/public/js/lib/jquery-3.2.1.min.js'
+                - '@FrontendBundle/Resources/public/js/lib/bootstrap.min.js'
+                - '@FrontendBundle/Resources/public/js/lib/owl.carousel.min.js'
+                - '@FrontendBundle/Resources/public/js/main.js'
+        homepageJS:
+             inputs:
+                - '@FrontendBundle/Resources/public/js/googlemaps.js'
+                - '@FrontendBundle/Resources/public/js/lib/jquery.scrollTo.min.js'
+                - '@FrontendBundle/Resources/public/js/addFavorite.js'
+                - '@FrontendBundle/Resources/public/js/socialShare.js'
+                - '@FrontendBundle/Resources/public/js/lib/socialApi.js'
+        commonCSS:
+            inputs:
+                - '@FrontendBundle/Resources/public/css/lib/bootstrap/bootstrap.min.css'
+                - '@FrontendBundle/Resources/public/css/lib/font-awesome/css/font-awesome.min.css'
+                - '@FrontendBundle/Resources/public/css/styles.css'
+                - '@FrontendBundle/Resources/public/css/lib/owl/assets/owl.carousel.min.css'
+                - '@FrontendBundle/Resources/public/css/linkLoginModal.css'
+                - '@FrontendBundle/Resources/public/css/header.css'
+        homepageCSS:
+            inputs:
+                - '@FrontendBundle/Resources/public/css/lib/arthref.css'
+
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: UserBundle\Entity\User
+    from_email:
+        address: 'wonderly@mail.com'
+        sender_name: 'wonderly@mail.com'
+    registration:
+        form:
+          type: FrontendBundle\Form\UserType
+        confirmation:
+            enabled: true
+            from_email:
+                address:  'wonderly@mail.com'
+                sender_name:  'wonderly'
+
+knp_paginator:
+    template:
+         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig
+
+welp_mailchimp:
+    api_key: '%mailchimp_api_key%'
+
+gpslab_geoip:
+    cache: '%kernel.cache_dir%/GeoLite2-City.mmdb'
+    url: 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz'
+    locales: [ '%locale%' ]

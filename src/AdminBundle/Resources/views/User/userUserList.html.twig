@@ -1,0 +1,70 @@
+{% extends '@Admin/Default/dashboard.html.twig' %}
+
+    {%- block stylesheets -%}
+        {%- stylesheets filter="cssrewrite"
+        '@AdminBundle/Resources/public/scss/_bootstrap.min.scss'
+        '@AdminBundle/Resources/public/css/font-awesome.min.css'
+        '@AdminBundle/Resources/public/css/style.css'
+        '@AdminBundle/Resources/public/css/table_style.css'
+        '@AdminBundle/Resources/public/assets/lib/jquery.datatables/plugins/bootstrap/3/dataTables.bootstrap.css'
+        -%}
+
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%- endstylesheets -%}
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Raleway:300,200,100" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" rel="stylesheet" type="text/css">
+    {%- endblock -%}
+
+
+{% block main %}
+
+    <div class="admin_table container">
+        <table id="admin_user_table" data-action-obj="userActions" data-searching="0" class="table table-bordered">
+            <thead>
+            <tr>
+                <th data-property="id" data-sort-name="User.id">Id</th>
+                <th data-property="email" data-sort-name="User.email">Email</th>
+                <th data-property="firstname" data-sort-name="User.firstname">Name</th>
+                <th data-property="lastname" data-sort-name="User.lastname">Surname</th>
+                <th data-property="roles" data-sort-name="User.roles">Roles</th>
+                <th data-property="enabled" data-sort-name="User.enabled">Enabled</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+    {% block javascripts %}
+
+        {% javascripts
+        '@AdminBundle/Resources/public/assets/lib/jquery/jquery.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.js'
+        '@AdminBundle/Resources/public/assets/js/cleanzone.js'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap/dist/js/bootstrap.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.datatables/js/jquery.dataTables.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.datatables/plugins/bootstrap/3/dataTables.bootstrap.js'
+        '@AdminBundle/Resources/public/assets/js/userTable.js'
+        '@AdminBundle/Resources/public/assets/js/page-form-elements.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var table;
+                App.init();
+                App.formElements();
+                table = App.initializeDataTable('#admin_user_table', {
+                    "pageLength": 100,
+                    ajax: {
+                        url: '{{- path('admin_user_useruserlist') -}}',
+                        data: App.createSerializeFormFn('')
+                    }
+                });
+            });
+        </script>
+
+    {% endblock %}

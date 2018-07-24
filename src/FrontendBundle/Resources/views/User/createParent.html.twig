@@ -1,0 +1,169 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+{% form_theme fatherForm _self %}
+
+{%- block stylesheets -%}
+{{ parent() }}
+<style>
+</style>
+
+{%- endblock -%}
+
+{% block main %}
+
+    <div class="container">
+        <div class="first-time-top">
+            <h2>Welcome to Wonderly
+                {% if app.user.firstname is defined  %}
+                    , {{ app.user.firstname }}
+                {% endif %}
+            </h2>
+            <h3>First of all, tell us about yourself so that we can better pick recommendations for you.</h3>
+        </div>
+
+        <div class="first-time-pick-role">
+            <h3>Who are you?</h3>
+            <div class="btn-group">
+                 <a class="btn active" href="{{ path('frontend_user_createparent') }}">PARENT</a>
+                 <a class="btn" href="{{ path('frontend_user_createorganizer') }}">ORGANIZER</a>
+            </div>
+        </div>
+
+        <div class="first-time-form">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    <form enctype="multipart/form-data" id="parentForm" action="{{ path('frontend_user_createparent') }}" method="post" name="father">
+                    <div class="form-horizontal">
+                        <div class="form-group ft-upload-wrapper">
+                            <div class="col-md-4 col-md-offset-4">
+                                <label for="" class="ft-upload">
+                                    <span id="addPhoto">+ add photo</span>
+                                    {{ form_widget(fatherForm.img) }}
+                                    <img id="qq" src="#">
+                                </label>
+                                {{ form_errors(fatherForm.img) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(fatherForm.age) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(fatherForm.age) }}
+                                {{ form_errors(fatherForm.age) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(fatherForm.location) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(fatherForm.location) }}
+                                {{ form_errors(fatherForm.location) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(fatherForm.address) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(fatherForm.address, {'id':'autocomplete', 'attr':{'class':"form-control", 'onFocus':"geolocate()"}}) }}
+                                {{ form_errors(fatherForm.address) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(fatherForm.category) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(fatherForm.category) }}
+                                {{ form_errors(fatherForm.category) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="child-wrapper">
+
+                        <h2>Children</h2>
+
+                        {{ form_widget(fatherForm.child, { attr: { class: 'child-list' } }) }}
+
+                        <button class="child-new btn btn-block">+ ADD CHILD</button>
+                    </div>
+                    <div class="ft-actions">
+                        <button type="submit" class="btn btn-next">Time for fun</button>
+                    </div>
+                    {{ form_end(fatherForm) }}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block _father_child_entry_row %}
+    <div class="child-prototype" id="child-form-number">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="" class="control-label col-md-4">
+                    First name
+                </label>
+                <div class="col-md-8">
+                    {{ form_widget(form.firstname) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="control-label col-md-4">
+                    Date of Birth
+                </label>
+                <div class="col-md-8">
+                    <div class='input-group date'>
+                    {{ form_widget(form.birthday, {'attr':{'class':'form-control', 'data-date-inline-picker': "false", 'data-date-open-on-focus':"true"}}) }}
+                    <span class="input-group-addon show-calendar">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock _father_child_entry_row %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/js/googlemaps.js'
+    '@FrontendBundle/Resources/public/js/prototype-child.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            $('#father_img').change(function (e) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#qq')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            });
+        });
+
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initAutocomplete"
+            async defer></script>
+
+
+{% endblock %}

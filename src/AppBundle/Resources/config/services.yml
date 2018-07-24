@@ -1,0 +1,21 @@
+services:
+    app.mailchimp:
+        class:     AppBundle\MailChimp\MailChimp
+        arguments:
+            - '@service_container'
+
+    app.mailchimp.listener:
+      class: 'AppBundle\Listeners\MailChimpListener'
+      arguments:
+        - '@app.mailchimp'
+      tags:
+          - { name: doctrine.event_listener, event: postPersist }
+
+    app.mailer:
+      class: 'AppBundle\Mailer\Mailer'
+      arguments:
+        - '@swiftmailer.mailer'
+        - '%mailer_sender_address%'
+        - '%mailer_sender_name%'
+        - '@router'
+        - '@doctrine.orm.entity_manager'

@@ -1,0 +1,141 @@
+{%- extends 'AdminBundle:Default:dashboard.html.twig' -%}
+
+    {%- block stylesheets -%}
+        {% stylesheets
+        '@AdminBundle/Resources/public/scss/_bootstrap.min.scss'
+        '@AdminBundle/Resources/public/css/font-awesome.min.css'
+        '@AdminBundle/Resources/public/css/style.css'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap.wysihtml5/dist/bootstrap3-wysihtml5.min.css'
+        filter="cssrewrite"
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%- endstylesheets -%}
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Raleway:300,200,100" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" rel="stylesheet" type="text/css">
+
+    {%- endblock -%}
+
+{% block main %}
+
+    <div class="admin_table container">
+
+        <table id="admin_event_table" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>name</th>
+                <th>category</th>
+                <th>address</th>
+                <th>zip</th>
+                <th>email</th>
+                <th>site</th>
+                <th>phonenumber</th>
+                <th>price</th>
+                <th>origin</th>
+                <th>parking</th>
+                <th>eventDate</th>
+                <th>action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in events %}
+                <tr class="odd gradeX">
+                    <!-- Event Name -->
+                    <td>
+                        {{ event.name }}
+                    </td>
+                    <!-- Event Category -->
+                    <td>
+                        {% if event.category is not empty %}
+                            {% for type in  event.category.toArray %}
+                                {{ type.tag }}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <!-- Event Address -->
+                    <td>
+                        {{ event.address }}
+                    </td>
+                    <!-- Event ZIP Code -->
+                    <td>
+                        {{ event.zip }}
+                    </td>
+                    <!-- Event Email -->
+                    <td>
+                        {{ event.email }}
+                    </td>
+                    <!-- Event Site -->
+                    <td>
+                        {{ event.site }}
+                    </td>
+                    <!-- Event Phonenumber -->
+                    <td>
+                        {{ event.phonenumber }}
+                    </td>
+                    <!-- Event Price -->
+                    <td>
+                        {{ event.price }}
+                    </td>
+                    <!-- Event Origin -->
+                    <td>
+                        {% if not event.origin == null %}
+                            {{ event.origin | date ('H:i') }}
+                        {% endif %}
+                    </td>
+                    <!-- Event Parking -->
+                    <td>
+                        {% if event.parking == false %}
+                            NO
+                        {% else %}
+                            YES
+                        {% endif %}
+                    </td>
+                    <!-- Event Date -->
+                    <td>
+                        {% if not event.eventDate == null %}
+                            {{ event.eventDate | date ('Y-m-d') }}
+                        {% endif %}
+                    </td>
+                    <!-- Event Action -->
+                    <td>
+                        <a href="{{ path('admin_event_eventimg', {'id':event.id}) }}"> <button>Img</button></a>
+                        <a href="{{ path('admin_event_eventedit', {'id':event.id}) }}"><button>Edit</button></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {% javascripts
+    '@AdminBundle/Resources/public/assets/lib/jquery/jquery.min.js'
+    '@AdminBundle/Resources/public/assets/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.js'
+    '@AdminBundle/Resources/public/assets/js/cleanzone.js'
+    '@AdminBundle/Resources/public/assets/lib/bootstrap/dist/js/bootstrap.min.js'
+    '@AdminBundle/Resources/public/assets/lib/jquery.datatables/js/jquery.dataTables.min.js'
+    '@AdminBundle/Resources/public/assets/lib/jquery.datatables/plugins/bootstrap/3/dataTables.bootstrap.js'
+    '@AdminBundle/Resources/public/assets/js/page-data-tables.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            //initialize the javascript
+            App.init();
+            App.dataTables({
+                "pageLength": 100
+            });
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,126 @@
+<style>
+    .modal-content {
+        max-height: calc(110vh - 212px);
+        overflow:auto;
+    }
+    .ui-datepicker-inline {
+        padding-left: 32px !important;
+    }
+    .ui-widget-header {
+        color: white;
+    }
+    .ui-datepicker .ui-datepicker-calendar .ui-state-highlight a {
+        background: #ef6461 none;
+        color: white;
+    }
+    .ui-widget-content .ui-state-highlight {
+         border: none;
+         background: none;
+        color: #777620;
+    }
+</style>
+{% if frontCreateOrganizer is defined %}
+    <div class="form-group">
+        <label for="" class="control-label col-md-4">Date of the Event</label>
+        <div class="col-md-8">
+            <input type="checkbox" data-toggle="toggle" data-on="Date" data-off="Never Mind" id="date-toggle">
+            <div class="select-date hidden">
+                <br>
+                <div class="btn-group">
+                    <span class="btn btn-primary" data-toggle="modal" data-target="#periodic-date-modal">Periodic date</span>
+                    <span class="btn btn-primary" data-toggle="modal" data-target="#custom-range-modal">Custom range</span>
+                    <span class="btn btn-primary" data-toggle="modal" data-target="#custom-date-modal">Custom dates</span>
+                    <br><br>
+                </div>
+                <div><span class="periodic-hide">Periodic Dates: none</span><span class="close" id="periodic-close">&times;</span></div>
+                <div><span class="date-hide">Date Range: none</span><span class="close pull-right" id="date-range-close">&times;</span></div>
+                <div><span class="date-multiple-hide">Custom Dates: none</span><span class="close pull-right" id="date-multiple-close">&times;</span></div>
+            </div>
+        </div>
+    </div>
+{% else%}
+<div class="form-group">
+    <label>Date of the Event</label>
+    <input type="checkbox" {% if eventDate is defined %}checked{% endif %} data-toggle="toggle" data-on="Date" data-off="Never Mind" id="date-toggle">
+    <div class="select-date {% if eventDate is not defined %}hidden{% endif %}">
+        <br>
+        <div class="btn-group">
+            <span class="btn btn-primary" data-toggle="modal" data-target="#periodic-date-modal">Periodic date</span>
+            <span class="btn btn-primary" data-toggle="modal" data-target="#custom-range-modal">Custom range</span>
+            <span class="btn btn-primary" data-toggle="modal" data-target="#custom-date-modal">Custom dates</span>
+        </div>
+        <br><br>
+        <div><span class="periodic-hide">Periodic Dates: none</span><span class="close" id="periodic-close">&times;</span></div>
+        <div><span class="date-hide">Date Range: none</span><span class="close pull-right" id="date-range-close">&times;</span></div>
+        <div><span class="date-multiple-hide">Custom Dates: none</span><span class="close pull-right" id="date-multiple-close">&times;</span></div>
+    </div>
+</div>
+{% endif %}
+<br>
+
+<div class="modal fade col-md-offset-3 col-md-6" role="dialog" id="periodic-date-modal" style="margin-top: 30px;">
+    <div class="modal-content col-md-12" style="border: 6px solid salmon;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="form-group">
+            <div class="text-center {% if frontCreateOrganizer is defined %}col-md-offset-4 col-md-4{% endif %}" style="margin-top: 30px">
+                Every
+                <select class="select text-center" id="periodic-date-select">
+                    <option disabled selected value></option>
+                    <option value="month">month</option>
+                    <option value="week">week</option>
+                </select>
+            </div>
+        </div>
+        {% set weekArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+        <div class="periodic-date-month hidden">
+            {% for week in 1..4 %}
+                <div class="col-md-3">
+                    <label>Week {{ week }}</label><br>
+                    {% for dayNumber, dayName in weekArray %}
+                        <input type="checkbox"
+                               id="periodic_month_{{ dayName }}{{ week }}" value="{{ week }}{{ dayName }}">
+                        <label>{{ dayName }}</label>
+                        <br>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <span class="btn btn-primary pull-right" id="periodic-date-save-month" style="margin-top: 10px; margin-bottom: 20px">Save</span>
+        </div>
+        <div class="periodic-date-week hidden">
+            <div class="col-md-offset-4 col-md-4">
+                {% for dayNumber, dayName in weekArray %}
+                    <input type="checkbox" value="0{{ dayName }}">
+                    <label>{{ dayName }}</label>
+                    <br>
+                {% endfor %}
+            </div>
+            <span class=" col-md-offset-4 btn btn-primary pull-right" id="periodic-date-save-week" style="margin-bottom: 30px">Save</span>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade col-md-offset-5 col-md-3" role="dialog" id="custom-range-modal" style="margin-top: 30px;">
+
+    <div class="modal-content col-md-12" style="border: 6px solid salmon;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+        <div class="modal-header">
+            <span class="col-md-offset-2 col-md-8 btn-lg btn-primary text-center" id="custom-range-save" style="margin-top: 10px; cursor: pointer;">Save</span>
+        </div>
+        <div id="mdp-range-modal"></div>
+    </div>
+</div>
+
+
+<div class="modal fade col-md-offset-5 col-md-3" role="dialog" id="custom-date-modal" style="margin-top: 30px;">
+
+    <div class="modal-content col-md-12" style="border: 6px solid salmon;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+        <div class="modal-header">
+            <span class="col-md-offset-2 col-md-8 btn-lg btn-primary text-center" id="custom-date-save" style="margin-top: 10px; cursor: pointer;">Save</span>
+        </div>
+        <div id="mdp-date-modal"></div>
+    </div>
+</div>
+

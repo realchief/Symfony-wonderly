@@ -1,0 +1,47 @@
+<div class="{{- class -}}">
+    <div class="event-img-carousel owl-carousel">
+        <!-- Event Images -->
+        {% if event.imageEvent.toArray is empty %}
+
+        {% else %}
+            {% for img in  event.imageEvent.toArray %}
+                <div class="owl-item">
+                    {% if img.img != null %}
+                        <img src="{{ asset('uploads/image/') ~ img.img }}">
+                    {% else %}
+                        <img src="{{ img.url }}">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="event-sharing clearfix">
+        <div class="event-save pull-left">
+            <a class="addFavoriteEvent" event="{{ event.id }}" style="cursor: pointer"
+               {% if favoriteEvent %}checked{% endif %} >
+            </a>
+        </div>
+        <div class="event-share {#sharethis-inline-share-buttons#} pull-right">
+            <a style="cursor: pointer"
+               onclick="showModalShare('{{ absolute_url(path('frontend_event_eventshow', {'slug':event.name | slugify, 'id': event.id })) }}', '{{ event.name }}')">
+                <i class="glyphicon glyphicon-share"></i>Share
+            </a>
+        </div>
+    </div>
+    <div class="event-booking">
+        <div class="event-prices pull-left">
+            <div class="event-price-block">
+                <!-- Event Price -->
+                {% if event.price %}
+                    ${{ event.price }}
+                {% endif %}
+            </div>
+        </div>
+        <!-- Incorrect event -->
+        <div class="event-book pull-right hidden-xs hidden-sm">
+            {#<a href="" class="btn btn-fill">Book it</a>#}
+            <span class="btn btn-warning contact" setTo="admin">Event information incorrect</span>
+        </div>
+    </div>
+</div>

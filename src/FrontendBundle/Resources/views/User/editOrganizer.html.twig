@@ -1,0 +1,118 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+
+{% form_theme organizerForm _self %}
+
+{%- block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            {% if choice.value != 'Admin' %}
+                <option value="{{ choice.value }}"{% if choice.attr %}{% with { attr: choice.attr } %}{{ block('attributes') }}{% endwith %}{% endif %}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</option>
+            {% endif %}
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options -%}
+
+{% block main %}
+    <div class="container" style="margin-top: 10px">
+
+        <div class="first-time-form">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    {{ form_start(organizerForm) }}
+                    <div class="form-horizontal">
+                        <div class="form-group ft-upload-wrapper">
+                            <div class="col-md-4">
+                                <img src="{{ asset('uploads/image/') ~ organizer.img }}" style="width: 10em" id="qq">
+                            </div>
+                            <div class="col-md-offset-4">
+                                {{ form_widget(organizerForm.img) }}
+                                {{ form_errors(organizerForm.img) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(organizerForm.age) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(organizerForm.age) }}
+                                {{ form_errors(organizerForm.age) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(organizerForm.location) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(organizerForm.location) }}
+                                {{ form_errors(organizerForm.location) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(organizerForm.address) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(organizerForm.address, {'id':'autocomplete', 'attr':{'class':"form-control", 'onFocus':"geolocate()"}}) }}
+                                {{ form_errors(organizerForm.address) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="control-label col-md-4">
+                                {{ form_label(organizerForm.profession) }}
+                            </label>
+                            <div class="col-md-8">
+                                {{ form_widget(organizerForm.profession) }}
+                                {{ form_errors(organizerForm.profession) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <input type="submit">
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_end(organizerForm) }}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/js/googlemaps.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#organize_img').change(function (e) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#qq')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            });
+        });
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initAutocomplete"
+            async defer></script>
+
+
+{% endblock %}

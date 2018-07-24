@@ -1,0 +1,79 @@
+{% if allEvents %}
+    {% if allEvents.count is defined %}
+        {% if allEvents.count == 0 %}
+            {% set eventHidden = 'hide' %}
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% set eventHidden = 'hide' %}
+{% endif %}
+<div class="events-list">
+    <div class="container">
+        <h3 class="section-title">All Events</h3>
+        {% if eventHidden is defined %}
+            <h3>Boo. No events with these filters, please change the filters and try again.</h3>
+        {% endif %}
+        <div class="row">
+            {% for event in allEvents %}
+                <div class="col-md-3 event-box-wrapper">
+                    <div class="event-box">
+                        <div class="event-box-top">
+                            <!-- Event Images -->
+                            {% if event.imageEvent.toArray is empty %}
+                                <img src="{{ asset('Resources/public/img/event-img.jpg')  }}">
+                            {% else %}
+                                {% set count = 1 %}
+                                {% for image in event.imageEvent.toArray if count < 2 %}
+                                    {% if image.img != null %}
+                                        <img src="{{ asset('uploads/image/') ~ image.img  }}">
+                                    {% else %}
+                                        <img src="{{ image.url }}">
+                                    {% endif %}
+                                    {% set count = count + 1 %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="event-box-info">
+                            <h3>
+                                {% if event.name != null %}
+                                    {% if event.name | length > 35 %}
+                                        <a href="{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}"
+                                           data-toggle="tooltip" title="{{ event.name }}" target="_blank">
+                                            {{ event.name [:35] }}...</a>
+                                    {% else %}
+                                        <a href="{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}" target="_blank">
+                                            {{ event.name }}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </h3>
+
+                            <!-- Event Date -->
+                            <div class="event-box-date">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                                {% if event.periodic.toArray | length > 1 %}
+                                    Multiple Days
+                                {% else %}
+                                    {{ event.eventDate | nearestDate(event.eventDateEnd, event.periodic.toArray) }}
+                                {% endif %}
+
+                                {% if event.origin %}
+                                    {{ event.origin | date ('g:i a') }}
+                                {% endif %}
+                            </div>
+                            <!-- Event Address -->
+                            {% if event.shortAddress %}
+                                <div class="event-box-date">
+                                    <i class="glyphicon glyphicon-map-marker"></i>
+                                    <span data-toggle="tooltip" style="cursor: pointer" title="{{ event.address }}">
+                                          {{ event.shortAddress }}
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

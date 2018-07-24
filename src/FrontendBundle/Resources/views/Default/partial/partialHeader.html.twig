@@ -1,0 +1,20 @@
+{% if getAdvertisement(0) %}
+    <div style="text-align: center;margin-bottom: 25px">
+    {{ getAdvertisement(0)|raw }}
+    </div>
+    {% else %}
+        <div class="wd-carousel owl-carousel">{# START Header carousel #}
+        <div class="owl-item wd-slide nestle">
+            <div class="container">
+                <h2>Welcome to Wonderly!</h2>
+                <h3>Family fun at your fingertips</h3>
+            </div>
+        </div>
+        <div class="owl-item wd-slide nestle">
+            <div class="container">
+                <h2>Welcome to Wonderly!</h2>
+                <h3>Fun activities in your city</h3>
+            </div>
+        </div>
+        </div>{# FINISH Header carousel #}
+{% endif %}

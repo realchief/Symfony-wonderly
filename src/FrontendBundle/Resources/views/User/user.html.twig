@@ -1,0 +1,163 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+
+{% block main %}
+    <div class="container">
+        <div class="col-md-7" style="margin-top: 30px">
+            <div class="panel panel-default">
+                <div class="panel-heading">  <h4 >User Profile</h4></div>
+                <div class="panel-body">
+                    <div class="box box-info">
+                        <div class="box-body">
+                            <div class="col-sm-6">
+                                <h4 style="color:#ef6461;">{{ user.user.firstname }} {{ user.user.lastname }}</h4>
+                                <a href="{{ path('frontend_user_useredit') }}" class="pull-right">
+                                    <button class="btn-primary"><i class="glyphicon glyphicon-pencil"></i></button>
+                                </a>
+                                <span><p>User Information:</p></span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr style="margin:5px 0 5px 0;">
+                            <div class="col-sm-5 col-xs-6 tital " >First Name:</div><div class="col-sm-7 col-xs-6 ">{{ user.user.firstname }}</div>
+                            <div class="clearfix"></div>
+                            <div class="bot-border"></div>
+                            <div class="col-sm-5 col-xs-6 tital " >Last Name:</div><div class="col-sm-7">{{ user.user.lastname }}</div>
+                            <div class="clearfix"></div>
+                            <div class="bot-border"></div>
+                            <div class="col-sm-5 col-xs-6 tital " >Email:</div><div class="col-sm-7">{{ user.user.email }}</div>
+                            <div class="clearfix"></div>
+                            <div class="bot-border"></div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+                {% if user.organizer is defined  %}
+                    {% set organizer = user.organizer %}
+                    <div class="panel-body">
+                        <div class="box box-info">
+                            <div class="box-body">
+                                <div class="col-sm-6">
+                                    <a href="{{ path('frontend_user_organizeredit') }}" class="pull-right">
+                                        <button class="btn-primary"><i class="glyphicon glyphicon-pencil"></i></button>
+                                    </a>
+                                    <span><p>Organizer Infomation:</p></span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr style="margin:5px 0 5px 0;">
+                                <div class="col-sm-6">
+                                    <div>
+                                        <img alt="User Pic" src="{{ asset('uploads/image/') ~ user.organizer.img }}"
+                                               width="150" id="profile-image1" class="img-thumbnail img-responsive">
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital"  style="margin-top: 20px">Profession:</div>
+                                <div class="col-sm-7 col-xs-6 " style="margin-top: 20px">{{ organizer.profession }}</div>
+                                <div class="clearfix"></div><div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital " >Address:</div>
+                                <div class="col-sm-7">{{ organizer.address }}</div>
+                                <div class="clearfix"></div><div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital " >Location:</div>
+                                <div class="col-sm-7">{{ organizer.location }}</div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital " >Age:</div>
+                                <div class="col-sm-7">{{ organizer.age }}</div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                            </div> <!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div>
+                    <div class="panel-body">
+                        <div class="box box-info">
+                            <div class="box-body">
+                                <div class="col-sm-6">
+                                    <span><p>Events:</p></span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr style="margin:5px 0 5px 0;">
+                                {% set events = organizer.event.toArray %}
+                                {% for event in events %}
+                                    <div class="form-group col-sm-9 col-xs-9">
+                                        <a href="{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}">
+                                            <h4>
+                                                Event -
+                                                {% if event.name == null or event.name == "" %}
+                                                    Unknown
+                                                {% else %}
+                                                    {{ event.name }}
+                                                {% endif %}
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a href="{{ path('frontend_event_eventedit', {'id': event.id}) }}" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a href="{{ path('frontend_event_eventimg', {'id': event.id}) }}" class="btn btn-success"><i class="glyphicon glyphicon-picture"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="bot-border"></div>
+                                {% endfor %}
+                            <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                {% endif %}
+                {% if user.father is defined  %}
+                    {% set father = user.father %}
+                    <div class="panel-body">
+                        <div class="box box-info">
+                            <div class="box-body">
+                                <div class="col-sm-6">
+                                    <a href="{{ path('frontend_user_parentedit') }}" class="pull-right">
+                                        <button class="btn-primary"><i class="glyphicon glyphicon-pencil"></i></button>
+                                    </a>
+                                    <span><p>Parent Infomation:</p></span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr style="margin:5px 0 5px 0;">
+                                <div class="col-sm-6">
+                                    <div>
+                                        <img alt="User Pic" src="{{ asset('uploads/image/') ~ user.father.img }}"
+                                             width="150" id="profile-image1" class="img-thumbnail img-responsive">
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital"  style="margin-top: 20px">Address:</div>
+                                <div class="col-sm-7 col-xs-6 " style="margin-top: 20px">{{ father.address }}</div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital " >Location:</div>
+                                <div class="col-sm-7">{{ father.location }}</div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital " >Age:</div>
+                                <div class="col-sm-7">{{ father.age }}</div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                                <div class="col-sm-5 col-xs-6 tital"  style="margin-top: 20px">Childs:</div>
+                                <div class="clearfix"></div>
+                                <div class="bot-border"></div>
+                                {% for child in father.child.toArray %}
+                                    <div class="col-sm-5 col-xs-6 tital">{{ child.firstname }}</div>
+                                    <div class="col-sm-7">{{ child.birthday | date('jS F Y') }}</div>
+                                    <div class="clearfix"></div>
+                                    <div class="bot-border"></div>
+                                {% endfor %}
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if user.organizer is defined  %}<div class="form-group text-center" style="margin-top: 30px">
+            <a href="{{ path ('frontend_event_eventcreate') }}" class="btn btn-primary">
+                <h4>Create new Event</h4>
+            </a></div>
+        {% endif %}
+    </div>
+{% endblock %}

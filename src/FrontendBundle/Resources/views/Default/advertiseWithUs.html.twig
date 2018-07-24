@@ -1,0 +1,370 @@
+{%- extends '@Frontend/frontend_layout.html.twig' -%}
+
+{%- block stylesheets -%}
+    {{ parent() }}
+    {% stylesheets
+    '@FrontendBundle/Resources/public/css/lib/arthref.css'
+    filter="cssrewrite"
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {%- endstylesheets -%}
+{%- endblock stylesheets -%}
+
+{%- block main -%}
+    <style>
+        .background-ultra-light-gray.darker {
+            background-color: #EF6461 !important;
+            color: white;
+        }
+        #footer, .box-arrow, .jumbotron.jumbotron-with-page-arrow, .page-section.page-section-with-arrow {
+            position: relative;
+        }
+        .page-section {
+            padding-top: 3.5rem;
+            padding-bottom: 3.5rem;
+            text-align: center;
+        }
+        .box-arrow::before, .jumbotron.jumbotron-with-page-arrow::before, .page-section.page-section-with-arrow::before {
+            position: absolute;
+            height: 30px;
+            width: 30px;
+            margin-top: -15px;
+            margin-left: -15px;
+        }
+        .box-arrow-small::before, .box-arrow::before, .jumbotron.jumbotron-with-page-arrow::before, .page-section.page-section-with-arrow::before {
+            content: "";
+            transform: rotate(45deg);
+            background-color: inherit;
+            top: 100%;
+            left: 50%;
+            border-left-width: 0;
+            border-top-width: 0;
+            z-index: 1;
+        }
+        *, ::after, ::before {
+            box-sizing: inherit;
+        }
+        .background-ultra-light-gray {
+            background-color: white !important;
+        }
+        .page-section.page-section-small {
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+        }
+        #footer, .box-arrow, .jumbotron.jumbotron-with-page-arrow, .page-section.page-section-with-arrow {
+            position: relative;
+        }
+        .page-section {
+            padding-top: 3.5rem;
+            padding-bottom: 3.5rem;
+            text-align: center;
+        }
+        .jumbotron-title.display-1 {
+            text-align: center;
+            font-size: 40px;
+            font-family: "Roboto Slab",Museo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .col-md.content-wrapper {
+            text-align: center;
+        }
+        .page-section.page-section-small .page-section-title {
+            font-size: 1.25rem;
+            font-weight: 400;
+        }
+        .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+            font-family: "Roboto Slab",Museo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .page-section.page-section-narrow > .container {
+            max-width: 83rem;
+        }
+        .page-section-headline.col-6 {
+            width: 50%;
+            float: right;
+        }
+        .small-button-style-outline .sqs-block-button .sqs-block-button-element--small, .medium-button-style-outline .sqs-block-button .sqs-block-button-element--medium, .large-button-style-outline .sqs-block-button .sqs-block-button-element--large, .small-button-style-outline .sqs-alternate-block-style-container .sqs-block-button .sqs-block-button-element--small, .medium-button-style-outline .sqs-alternate-block-style-container .sqs-block-button .sqs-block-button-element--medium, .large-button-style-outline .sqs-alternate-block-style-container .sqs-block-button .sqs-block-button-element--large {
+            border-width: 2px;
+            border-style: solid;
+            background-color: transparent;
+            -webkit-transition: 0.1s background-color linear, 0.1s color linear;
+            -moz-transition: 0.1s background-color linear, 0.1s color linear;
+            -o-transition: 0.1s background-color linear, 0.1s color linear;
+            transition: 0.1s background-color linear, 0.1s color linear;
+        }
+        .sqs-block-button .sqs-block-button-container--center {
+            text-align: center;
+        }
+        .medium-button-style-outline .sqs-block-button .sqs-block-button-element--medium {
+            color: #fff;
+        }
+        .sqs-block-button .sqs-block-button-element--medium {
+            padding: 21px 34px;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: futura-pt;
+            font-size: 15px;
+            font-weight: 700;
+            font-style: normal;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background-color: #fff;
+            color: #EF6461;
+            border: 2px #EF6461 solid;
+            position: relative;
+            display: inline-block;
+        }
+        .col.sqs-col-3.span-3 {
+            width: 24%;
+        }
+        .col.sqs-col-2.span-2 {
+            width: 17%;
+        }
+        .sqs-layout:not(.sqs-editing) > .sqs-row:first-child > [class*="sqs-col"]:first-child > .sqs-block:last-child, .sqs-layout:not(.sqs-editing) .sqs-block + .sqs-row .sqs-block:not(.float):last-child {
+            padding-bottom: 17px;
+        }
+        .sqs-layout:not(.sqs-editing) .sqs-block + .sqs-row .sqs-block:not(.float):first-child {
+            padding-top: 17px;
+        }
+        .sqs-block:not(.sqs-block-html):not(.sqs-block-markdown) {
+            clear: both;
+        }
+        [class*="sqs-col"] .sqs-block {
+            padding-left: 17px;
+            padding-right: 17px;
+        }
+        .sqs-block {
+            position: relative;
+            height: auto;
+            padding-top: 17px;
+            padding-bottom: 17px;
+            outline: none;
+            box-shadow: inset 0 0 0 1px rgba(128,128,128,0);
+            transition: box-shadow .2s ease-in-out;
+        }
+        .parallax-item[data-url-id="about-contact"] .content .sqs-layout .sqs-col-12 .sqs-col-2 {
+            width: 20% !important;
+        }
+        .sqs-col-12 .sqs-col-2 {
+            width: 16.6667%;
+        }
+        .sqs-col-2 {
+            width: 16.6667%;
+        }
+        [class*="sqs-col"] {
+            float: left;
+        }
+        .advertisement_list {
+            font-size:2rem; text-align: left; padding-top: 10px;
+        }
+        ul.advertisement_list {
+            list-style-type: none;
+        }
+        ul.advertisement_list  li {
+            margin-bottom: 5px;
+            margin-left: 25px;
+        }
+        ul.advertisement_list > li {
+            text-indent: -5px;
+        }
+        ul.advertisement_list > li:before {
+            content: "-";
+            text-indent: -5px;
+        }
+        .advertise_with_us .page-section-subtitle {
+            margin: 10px 20px;
+        }
+        .background-ultra-light-gray .darker {
+            background-color: #EF6461 !important;
+            color: white;
+        }
+        .advertise_with_us .package-title {
+            padding: 30px 10px;
+            margin-top: 0px;
+            position: relative;;
+        }
+        .advertise_with_us .package-title span{
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            width: 150px;
+            top: -20px;
+            background-color: #666666;
+            color: #ffffff;
+            font-size: 13px;
+            border: 2px solid #ffffff;
+            padding: 10px;
+        }
+        .advertise_with_us .feature-list {
+            text-align: left;
+        }
+        .advertise_with_us h3 {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+        .advertise_with_us .package-container {
+            margin-left: 15px;
+            margin-right: 15px;
+            padding-left: 0px;
+            padding-right: 0px;
+            border: 2px solid #EF6461;
+            min-height: 400px;
+            margin-bottom: 20px;
+        }
+        @media only screen and (max-width: 996px) {
+            .col.sqs-col-3.span-3 {
+                width: 100%;
+            }
+            .col.sqs-col-2.span-2 {
+                width: 100%;
+            }
+        }
+    </style>
+    <header class="js-handle-banner js-id-13275" style="padding:45px 0px;background:white;color: #EF6461;">
+        <div class="container">
+            <div class="row ">
+                <div class="col-md  content-wrapper">
+                    <h1 class="jumbotron-title display-1">
+                        <p>Advertise With Us</p>
+                    </h1>
+                    <h5 class="jumbotron-subtitle">
+                        <p style='font-size:20px;'>
+
+                        </p>
+                    </h5>
+                </div>
+            </div>
+            <div class="overlay"></div>
+        </div>
+        <div class="jumbotron-overlay"></div>
+    </header>
+
+    <div class="page-section-wrapper">
+        <div class="page-section-anchor" id=""></div>
+        <div class="page-section  darker page-section-small page-section-with-arrow page-section-narrow js-handle-pageSection js-id-14039 background-ultra-light-gray" style="">
+            <div class="container">
+                <div class="page-section-headline">
+                    <h2 class="page-section-headline">
+                        <p>HOW DO OUR ADS DIFFER?</p>
+                    </h2>
+                    <ul class="advertisement_list">
+                        <li>ABILITY TO HIGHLY TARGET TO LOCAL OR REGIONAL MARKET</li>
+                        <li>WEBSITE LINK BACK (HELPS WITH ORGANIC TRAFFIC)</li>
+                        <li>UNLIMITED ARCHIVES</li>
+                        <li>SEO KEYWORD OPTIONS (WE LINK BACK TO YOUR SITE BASED ON KEY WORDS)</li>
+                        <li>VIDEO AD OPTIONS</li>
+                        <li>PUSH NOTIFICATION OPTIONS FOR SPECIALS TO OUR USERS</li>
+                        <li>FEATURE COMPANY BACKGROUND</li>
+                        <li>TELL A PERSONALIZED STORY OF YOUR BUSINESS</li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-section-wrapper advertise_with_us">
+        <div class="page-section-anchor" id="advertise-with-us"></div>
+        <div class="page-section page-section-advertise-with-us js-handle-pageSection js-id-24749 background-ultra-light-gray " style="">
+            <div class="container">
+                <div class="row">
+                    <div class="page-section-headline col-6">
+                        <h2 class="page-section-title">
+                            <p>GOWONDERLY.COM</p>
+                        </h2>
+                        <p class="page-section-subtitle">Is a daily source of inspiration, imagination, fun, and laughter. We deliver consistent, unique, and curated content to our eager audience of smart, curious, and multi-tasking parents. We serve as a catalyst for parents to  nd fun events, businesses, and activities for their families.
+                            Local reach expands to Napa, Sonoma, Marin, and San Francisco counties with regional expansion plans in the very near future.</p>
+                    </div>
+
+                    <div class="page-section-headline col-6">
+                        <h2 class="page-section-title">
+                            <p>What it means to be a parent</p>
+                        </h2>
+                        <p class="page-section-subtitle ">
+                            Being a parent is one of the most rewarding, challenging, and life-al- tering things you can experience. As fellow parents, we know how hard it is to  nd vibrant and family focused businesses and events that speak directly to a families’ needs.
+                            <br />Wonderly connects with millions of eager families who look for local events, businesses, and activities to enrich their children’s lives, expand their minds, and open them up to exploration and imagination. Make your brand the preferred choice with these af uent families and household decision-makers through a variety of customized programs integrated across digital, video, community, and mobile platforms.
+                        </p>
+                    </div>
+                    <div class="page-section-headline col-6">
+                        <h2 class="page-section-title">
+                            <p>Social Media</p>
+                        </h2>
+                        <p class="page-section-subtitle">
+                            With us, families have a community — a place they can go to  nd fun, local things to do, discover opportunities for new activities, and learn about their local community businesses.
+                            5 Distinct communities/counties
+                            9 Social Media Channels
+                            Serving the 300,000+ local households in our current counties
+                        </p>
+                    </div>
+                    <div class="page-section-headline col-6">
+                        <h2 class="page-section-title">
+                            <p>Our advantages</p>
+                        </h2>
+                        <p class="page-section-subtitle">We focus on family events in a robust responsive app. We cater directly to our local markets and produce rich content that matches our readership. Each event is carefully selected to beincluded in our list with critical information of time, date, and other details.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="page-section-wrapper advertise_with_us">
+    <div class="page-section-anchor" id="advertise-with-us-packages"></div>
+    <div class="page-section page-section-advertise-with-us-packages background-ultra-light-gray " style="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-sm-3 col-md-3 col-lg-3 package-container">
+                    <h2 class="package-title darker">
+                        BRONZE $300
+                    </h2>
+                    <h3>Ad Feature 1 month:</h3>
+                    <ul class="feature-list">
+                        <li>Newest events</li>
+                        <li>Event page</li>
+                        <li>Recommends</li>
+                        <li>Custom ad support</li>
+                        <li>Geo targeting option based on distance to desired city</li>
+                        <li>1 Social media link all channels</li>
+                        <li>1 Email to users</li>
+                    </ul>
+                    *keyword link on page
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 package-container">
+                    <h2 class="package-title darker">
+                        SILVER $600
+                        <span>MOST POPULAR</span>
+                    </h2>
+                    <h3>Same as bronze, PLUS:</h3>
+                    <ul class="feature-list">
+                        <li><strong>Banner Ad</strong></li>
+                        <li>Video Ad option</li>
+                        <li>1 Push notification</li>
+                    </ul>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 package-container">
+                    <h2 class="package-title darker">
+                        GOLD $1000
+                        <span>MOST SITE EXPOSURE</span>
+                    </h2>
+                    <h3>Same as bronze, PLUS:</h3>
+                    <ul class="feature-list">
+                        <li><strong>Banner Ad</strong></li>
+                        <li>Video Ad option</li>
+                        <li>2 Push notifications</li>
+                        <li>Video Short</li>
+                        <li>2 Social Media posts</li>
+                        <li>2 Email blasts</li>
+                        <li>Account Rep to manage account</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%- endblock main -%}
+
+

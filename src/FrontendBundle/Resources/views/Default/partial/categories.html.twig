@@ -1,0 +1,40 @@
+{% set categoriesImgMap = {
+    'Arts + Crafts': 'Arts+Crafts.jpg',
+    'Dance+Fitness': 'DanceFitness.jpg',
+    'Animals/Parks/Nature': 'ANIMALSPARKS.jpg',
+    'Market + Fair': 'Market+Fair.jpg',
+    'Music + Singing + Drama': 'Music+Singing+Drama.jpg',
+    'Exhibitions/Shows': 'PlayShows.jpg',
+    'Movie': 'Movie.jpg',
+    'Special Learning': 'SpecialLearning.jpg',
+    'Performances': 'dance.jpg',
+    'Story + Talks': 'Story+Talks.jpg',
+    'Museums': 'Museums.jpeg',
+    'All + Events': 'dance.jpg'
+    }
+%}
+
+
+<div class="categories category-list">
+    <div class="container">
+        <h3 class="section-title">Browse by categories</h3>
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-md-3 col-xs-6 category-wrapper">
+                    <div class="category category-main"
+                         style="background-image: url({{ asset('Resources/public/img/category/') ~  attribute(categoriesImgMap, category.name) }})">
+                        <h3 class="category-title">
+                            <a style="cursor: pointer;" categoryid="{{ category.id }}"
+                               onclick="eventByCategory('{{ category.id }}', this)">
+                                {{ category.name }}
+                            </a>
+                        </h3>
+                        <div class="category-posts-count">
+                            {{ category.count }} events
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

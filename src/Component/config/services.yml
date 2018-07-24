@@ -1,0 +1,36 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  #
+  # Event filters storage.
+  #
+  Component\EventFilter\Storage\ORMEventFilterStorage:
+    arguments:
+      - '@doctrine.orm.default_entity_manager'
+
+  Component\EventFilter\Storage\EventFilterStorageInterface: '@Component\EventFilter\Storage\ORMEventFilterStorage'
+
+  #
+  # Address resolver component.
+  #
+
+  Component\Locator\GoogleGeoCodeAddressResolver:
+    arguments:
+      - '%google_maps_api_key%'
+
+  Component\Locator\CachedAddressResolver:
+    arguments:
+      $resolver: '@Component\Locator\GoogleGeoCodeAddressResolver'
+
+  Component\Locator\AddressResolverInterface: '@Component\Locator\CachedAddressResolver'
+
+  #
+  # Table processor components.
+  #
+  Component\TableProcessor\:
+    resource: '../TableProcessor/*'
+
+  Component\TableProcessor\TableProcessorInterface: '@Component\TableProcessor\JQueryDataTableProcessor'

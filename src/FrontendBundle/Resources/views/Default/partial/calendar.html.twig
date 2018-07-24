@@ -1,0 +1,55 @@
+<div class="event-filter">
+    <div class="container">
+        <div class="row">
+            {#<div class="col-md-3 filter-btns">#}
+                {#<div class="btn-group">#}
+                    {#<a href="#" class="btn btn-wd active">Experience</a>#}
+                    {#<a href="#" class="btn btn-wd">WonderFun</a>#}
+                {#</div>#}
+            {#</div>#}
+            <div class="col-md-7 filter-date">
+                <h3 class="desktop-filter-text">Choose Date</h3>
+                <h3 class="mobile-filter-text">Find fast</h3>
+                <div class="fd-wrapper">
+                    <div class="filter-date-carousel owl-carousel">
+                        {% for chooseDate in dateArray %}
+                            <div class="item day{{ chooseDate | date('d') }}"
+                                 onclick="eventByDate('{{ chooseDate | date }}')">
+                                <span class="fd-date">{{ chooseDate | date('M, j') }}</span>
+                                <span class="fd-day">{{ chooseDate | date('l') }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 align-right filter-wrapper ">
+                <div class="more-filters">
+                    <a data-target="#filters-modal" data-toggle="modal" class="btn btn-fill btn-block">
+                        <i class="icon-filer"></i>
+                    </a>
+                </div>
+                <div class="clear-filters" style="">
+                    <a class="btn btn-fill" onclick="clearFilter()" style="">Clear
+                        {#<i class="icon-clean"></i>#}
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <input type="text"
+                           class="form-control input-lg"
+                           placeholder="Search by name"
+                           id="search-by-name"
+                           value=""
+                    >
+                </div>
+            </div>
+            <div class="col-md-1">
+                <a class="btn btn-fill"
+                   onclick="ajaxEventByDateOrPage(1)" style="height: 46px;padding-top: 11px;">Search</a>
+            </div>
+        </div>
+    </div>
+</div>

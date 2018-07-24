@@ -1,0 +1,35 @@
+<div class="pagination-events-list">
+    {% if countPage != 1 %}
+        {% if countPage != 0 %}
+            <div class="container">
+                <ul class="pagination">
+                    {% if countPage < 11 %}
+                        {% for i in 1..countPage %}
+                            <li {% if currentPage == i %}class="active"{% endif %}>
+                                <a style="cursor: pointer" onclick="eventByPage('{{ i }}')">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    {% elseif countPage > 10 %}
+                        {% for i in 1..countPage %}
+                            {% if currentPage - i < 4 and currentPage - i > 0  %}
+                                <li>
+                                    <a style="cursor: pointer" onclick="eventByPage('{{ i }}')">{{ i }}</a>
+                                </li>
+                            {% endif %}
+                            {% if currentPage == i %}
+                                <li class="active">
+                                    <a style="cursor: pointer" onclick="eventByPage('{{ i }}')">{{ i }}</a>
+                                </li>
+                            {% endif %}
+                            {% if i - currentPage < 7 and i - currentPage > 0 %}
+                                <li>
+                                    <a style="cursor: pointer" onclick="eventByPage('{{ i }}')">{{ i }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

@@ -1,0 +1,60 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+{% block body %}
+    <body class="login">
+        <div class="login-form">
+            <div class="login-logo">
+                Wonderly
+            </div>
+
+            <h2>More fun for <br>
+                your family</h2>
+
+            {% block fos_user_content %}
+
+                <div class="login-fields">
+
+                    {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+                        <div class="login-field">
+                            {{ form_row(form.firstname) }}
+                        </div>
+                        <div class="login-field">
+                            {{ form_row(form.lastname) }}
+                        </div>
+                        <div class="login-field">
+                            {{ form_widget(form.email) }}
+                            {% if form_errors(form.email) == "<ul><li>The email is not valid.</li></ul>" %}
+                                <span class="error-label">Email should contain @ sign. Try again, please</span>
+                            {% elseif form_errors(form.email) == "<ul><li>The email is already used.</li><li>This email is already used.</li></ul>" %}
+                                <span class="error-label">This email is already used.</span>
+                            {% endif %}
+                        </div>
+                        <div class="login-field">
+                        {{ form_row(form.password) }}
+                        </div>
+                        <div class="login-field">
+                            <button type="submit">
+                                Create Account
+                            </button>
+                        </div>
+
+                    {{ form_end(form) }}
+                </div>
+            {% endblock fos_user_content %}
+
+            <div class="login-note have-account">
+                Already have an Account? <a href="{{ path('fos_user_security_login') }}">Login</a>
+            </div>
+
+            <div class="login-note">
+                By using Wonderly you agree to our
+                <a style="cursor: pointer" data-toggle="modal" data-target="#termsOfUse">Terms of Use</a> and
+                <a style="cursor: pointer" data-toggle="modal" data-target="#termsOfUse">Privacy Policy</a>
+            </div>
+        </div>
+        {% include '@Frontend/Partial/privacyPolicyTermsOfUse.html.twig' %}
+
+    </body>
+{% endblock %}

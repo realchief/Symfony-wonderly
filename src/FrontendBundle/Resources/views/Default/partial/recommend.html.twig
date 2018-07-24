@@ -1,0 +1,73 @@
+<div class="categories recommend">
+    <div class="container">
+        <a href="#" class="watch-more">Watch all</a>
+        <h3 class="section-title">Wonderly Recommends</h3>
+        <div class="recommend-wrapper">
+            <div class="owl-carousel recommend-carousel">
+                {% for event in recommendEvents %}
+                <div class="category-wrapper col-md-12">
+                    {% if event.imageEvent.toArray is empty %}
+                    <div class="category category-main" style="background-image: url({{ asset('Resources/public/img/event-img.jpg') }})">
+                        {% else %}
+                        {% set count = 1 %}
+                        {% for image in event.imageEvent.toArray if count < 2 %}
+                        <div class="category category-main" style="background-image: url({{ asset('uploads/image/') ~ image.img }})">
+                            {% set count = count + 1 %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="category-tags">
+                                {% set count = 1 %}
+                                {% for tag in event.category.toArray if count < 2 %}
+                                    <div class="cat-badges">
+                                        <span class="cat-badge badge-blue">{{ tag }}</span>
+                                    </div>
+                                    {% set count = count + 1 %}
+                                {% endfor %}
+                                <div class="cat-actions">
+                                    <a class="event-like addFavoriteEvent"
+                                        event="{{ event.id }}" style="cursor: pointer"
+                                        {% if event.liked %}checked{% endif %} >
+                                    </a>
+                                    <a style="cursor:pointer" class="event-share event-share{{ event.id }}"
+                                       onclick="showModalShare('{{ absolute_url(path('frontend_event_eventshow', {'slug':event.name | slugify, 'id': event.id })) }}', '{{ event.name }}')">
+                                        <i class="fa fa-share-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="category-info">
+                                <h3 class="category-title">
+                                    {% if event.name != null %}
+                                        {% if event.name | length > 40 %}
+                                            <a href="{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}"
+                                               data-toggle="tooltip" title="{{ event.name }}"  target="_blank">
+                                                {{ event.name [:40] }}...
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id}) }}" target="_blank">
+                                                {{ event.name }}
+                                            </a>
+                                        {% endif %}
+
+                                    {% endif %}
+                                </h3>
+                                <div class="recommend-date">
+                                    <i class="fa fa-calendar"></i>
+                                    {{ event.eventDate | nearestDate(event.eventDateEnd, event.periodic.toArray) }}
+                                    {% if event.origin %}
+                                        {{ event.origin | date ('g:i a') }}
+                                    {% endif %}
+                                </div>
+                                <div class="recommend-location">
+                                    {% if event.shortAddress %}
+                                            <span>{{ event.shortAddress }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

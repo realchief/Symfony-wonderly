@@ -1,0 +1,271 @@
+{%- extends '@Frontend/frontend_layout.html.twig' -%}
+
+{% block metatags %}
+    {{ parent() }}
+    <!-- google+ -->
+    <meta itemprop="name" content="{{ event.name }}">
+    <meta itemprop="description" content="{{ event.description }}">
+    <!-- facebook -->
+    <meta property="og:url"           content="{{ absolute_url(path('frontend_event_eventshow', {'slug':event.name|slugify, 'id':event.id})) }}"/>
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="{{ event.name }}" />
+    <meta property="og:description"   content="{{ event.description }}" />
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ event.name }}">
+    <meta name="twitter:description" content="{{ event.description }}">
+    {% if event.imageEvent.toArray is not empty %}
+        {% set image = event.imageEvent.toArray|first %}
+        <meta property="og:image"     content="{{ absolute_url(asset('uploads/image/') ~ image.img) }}" />
+        <meta name="twitter:image" content="{{ absolute_url(asset('uploads/image/') ~ image.img) }}">
+        <meta itemprop="image" content="{{ absolute_url(asset('uploads/image/') ~ image.img) }}">
+    {% endif %}
+{% endblock %}
+
+{%- block stylesheets -%}
+    {{ parent() }}
+    {% stylesheets
+    '@FrontendBundle/Resources/public/css/contactForm.css'
+    '@FrontendBundle/Resources/public/css/lib/arthref.css'
+    '@FrontendBundle/Resources/public/css/page/eventShow.css'
+    filter='cssrewrite'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{%- endblock -%}
+
+{%- block main -%}
+    <div class="event-page">
+        <div class="container">
+            <div class="col-md-6 event-main-info">
+                {% embed '@Frontend/Event/partial/eventShowImage.html.twig' with { class: 'visible-xs visible-sm'} %}{% endembed %}
+
+                <h1 class="event-title">
+                    <!-- Event Name -->
+                    {% if event.name %}
+                        {{ event.name }}
+                    {% endif %}
+                </h1>
+                <div id="contactForm">
+                    <div class="contact-form-title">
+                    </div>
+                    {{ form_start(contactForm) }}
+                    {{ form_widget(contactForm) }}
+                    <input class="btn" type="submit" />
+                    {{ form_end(contactForm) }}
+                </div>
+
+                {#<div class="event-reviews clearfix">#}
+                    {#<span class="event-rating-avg">4,8</span>#}
+                    {#<div class="event-rating-stars">#}
+                        {#<div class="event-rating-stars-bg">#}
+                        {#</div>#}
+                        {#<div class="event-rating-stars-fill" style="width: 80%;">#}
+                        {#</div>#}
+                    {#</div>#}
+
+                    {#<span class="event-comments-count">26 comment</span>#}
+                {#</div>#}
+
+                <div class="event-tags">
+                    <div class="event-date">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        {{ periodic }}
+                        <!-- Event Date -->
+                        {% if event.eventDate %}
+                            {{ event.eventDate | date ('l, d F') }}
+                        {% endif %}
+                        <!-- Event Origin -->
+                        {% if event.origin %}
+                        {{ event.origin | date ('g:i A') }}
+                        {% endif %}<!-- Thursday, 15th June at 11:30 am -->
+                        {% if event.eventDateEnd or event.finish %}
+                            -
+                        {% endif %}
+                        <!-- Event Date -->
+                        {% if event.eventDateEnd %}
+                            {{ event.eventDateEnd | date ('l, d F') }}
+                        {% endif %}
+                        <!-- Event Origin -->
+                        {% if event.finish %}
+                        {{ event.finish | date ('g:i A') }}
+                        {% endif %}<!-- Thursday, 15th June at 11:30 am -->
+                    </div>
+                    <div class="event-location">
+                        <i class="glyphicon glyphicon-map-marker"></i>
+                        {#National museum of science,  42 Lencsington ave.#}
+                        <!-- Event Address -->
+                        {% if event.address %}
+                            {{ event.address }}
+                        {% endif %}
+                    </div>
+                    <div class="event-duration">
+                        <i class="glyphicon glyphicon-time"></i>
+                        Hours of Operation:  {% if event.originWork %} Open {{ event.originWork | date ('g-i A') }} {% endif %} / {% if event.finishWork %} Closed {{ event.finishWork | date ('g-i A') }} {% endif %}
+                    </div>
+                    {% if event.email %}
+                    <div class="event-duration">
+                        <i class="glyphicon glyphicon-envelope"></i>
+                        <a href="mailto:{{ event.email }}">{{ event.email }}</a>
+                    </div>
+                    {% endif %}
+                    <div class="event-duration">
+                        <i class="glyphicon glyphicon-globe"></i>
+                        {% if event.site %} <a href="{{ event.site }}">{{ event.site }}</a> {% endif %}
+                    </div>
+                    {% if event.phonenumber %}
+                    <div class="event-duration">
+                        <i class="glyphicon glyphicon-earphone"></i>{{ event.phonenumber }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Event Description -->
+                <div class="event-desc">
+                    <h3>Description</h3>
+                    <div class="event-desc-body">
+                        {% if event.description %}{{ event.description }}{% endif %}
+                    </div>
+                </div>
+
+
+                <!-- Event Tips -->
+                {% if event.tips %}
+                <div class="event-desc">
+                    <h3>Helpful tips</h3>
+                    <div class="event-desc-body">
+                        {{ event.tips }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Event info -->
+                <div class="event-duration">
+                    ZIP code: {% if event.zip %}{{ event.zip }}{% endif %}
+                </div>
+                <div class="event-duration">
+                    Indoor or Outdoor: {% if event.outdoor %}{{ event.outdoor }}{% endif %}
+                </div>
+                <div class="event-duration">
+                    Food available for purchase: {% if event.food %}Yes{% else %}No{% endif %}
+                </div>
+
+                <div class="event-organizer">
+                    <h3>Organizer</h3>
+                    <div class="wd-user event-org-user">
+                        <div class="wd-user-avatar">
+                            {% if event.organize.img %}
+                                <img src="{{ asset('uploads/image/') ~ event.organize.img }}">
+                            {% endif %}
+                            <span class="wd-user-check"></span>
+                        </div>
+
+                        <div class="wd-user-info">
+                            <h3 class="wd-user-name">
+                                <!-- Event Organizer -->
+                                {% if event.organize %}
+                                    <a href="{{ path('frontend_user_organizer', {'id': event.organize.id}) }}">
+                                    {{ event.organize.userFirstname }}
+                                    {{ event.organize.userLastname }}
+                                    </a>
+                                {% endif %}
+                            </h3>
+
+                            <h4 class="wd-user-position">
+                                <!-- Event Organizer profession -->
+                                {% if event.organize %}
+                                    {{ event.organize.profession }}
+                                {% endif %}
+                            </h4>
+
+                            <div class="wd-user-links">
+                                <a style="cursor: pointer" class="contact" setTo="organizer"
+                                        {% if event.organize %}
+                                            name="{{ event.organize.userFirstname }}" id="{{ event.organize.id }}"
+                                        {% endif %}
+                                >Contact with organizer</a>
+                                <a href="{{ path('frontend_user_organizer', {'id': event.organize.id}) }}">More info</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-map"></div>
+            </div>
+
+            <div class="col-md-6 event-right-info">
+                    {% embed '@Frontend/Event/partial/eventShowImage.html.twig' with { class: 'hidden-xs hidden-sm'} %}
+                    {% endembed %}
+                <div class="event-book pull-right visible-xs visible-sm">
+                    {#<a href="" class="btn btn-fill">Book it</a>#}
+                    <span class="btn btn-warning contact" setTo="admin">Event information incorrect</span>
+                </div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Event Category -->
+    {% if event.category.toArray is empty %}
+
+    {% else %}
+        <div class="container">
+            {% for type in  event.category.toArray %}
+                <span class="badge badge-warning">
+                    {{ type.tag }}
+                </span>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% include '@Frontend/Event/partial/socialShareModal.html.twig' %}
+    <!-- Message Success Modal -->
+    <div {% if messageSent %}id="messageSent"{% endif %} class="modal">
+        <div class="modal-content alert alert-success alert-dismissable text-center success-modal">
+            <a href="#" id="messageSentClose" class="close" aria-label="close">&times;</a>
+            <strong>Success!</strong> Message sent successfull
+        </div>
+    </div>
+
+
+
+{%- endblock -%}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/js/contactForm.js'
+    '@FrontendBundle/Resources/public/js/addFavorite.js'
+    '@FrontendBundle/Resources/public/js/socialShare.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap"></script>
+    <script>
+        var a2a_config = a2a_config || {};
+        a2a_config.locale = "en";
+    </script>
+    <script async src="https://static.addtoany.com/menu/page.js"></script>
+    <script>
+        $(document).ready(function () {
+            checkedFavoriteEvents(
+                'addFavoriteEvent',
+                '<i class="glyphicon glyphicon-heart-empty"></i> Add to saved',
+                '<i class="glyphicon glyphicon-heart" style="color: #ef6461"></i> Add to saved',
+                '{{ path('frontend_event_apieventfavorite') }}'
+            )
+        });
+        $('[data-toggle="popover"]').popover({html:true});
+
+        function initMap() {
+            var uluru = {lat: Number("{{ event.point.y }}"), lng: Number("{{ event.point.x }}")};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 17,
+                center: uluru
+            });
+            var marker = new google.maps.Marker({
+                position: uluru,
+                map: map
+            });
+        }
+    </script>
+{% endblock %}

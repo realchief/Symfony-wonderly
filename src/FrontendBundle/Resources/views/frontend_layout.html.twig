@@ -1,0 +1,42 @@
+{#
+
+    Application frontend layout.
+
+#}
+{%- extends '::base.html.twig' -%}
+
+{% block metatags %}
+    {{ parent() }}
+{% endblock %}
+
+{%- block stylesheets -%}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    {% stylesheets
+    '@commonCSS'
+    filter="cssrewrite"
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {%- endstylesheets -%}
+{%- endblock -%}
+
+{%- block body -%}
+    <header>
+        {%- include 'FrontendBundle:Partial:header.html.twig' -%}
+    </header>
+
+    <div class="main">
+        {%- block main -%}{%- endblock -%}
+    </div>
+
+    <footer class="footer">
+        {%- include 'FrontendBundle:Partial:footer.html.twig' -%}
+    </footer>
+{%- endblock body -%}
+
+{% block javascripts %}
+    {% javascripts
+    '@commonJS'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

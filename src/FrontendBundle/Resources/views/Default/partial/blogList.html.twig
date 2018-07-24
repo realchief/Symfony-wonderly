@@ -1,0 +1,32 @@
+<div class="blog-list">
+    <div class="container">
+        <a href="{{ wonder_blog_url }}" target="_blank" class="watch-more">View all</a>
+        <h3 class="section-title"> <!-- todo -->
+            Wonderly Blog
+        </h3>
+
+        <div class="row">
+            <div class="owl-carousel news-carousel">
+                {% for post in blog %}
+                    <div class="col-md-12 event-box-wrapper">
+                        <div class="event-box">
+                            <div class="event-box-top">
+                                <img src="{{ post.imageUrl  }}">
+                            </div>
+                            <div class="event-box-info">
+                                <h3>
+                                    <a href="{{ post.postUrl }}" target="_blank">{{ post.title }}</a>
+                                </h3>
+                                <div class="event-box-date">
+                                    <div class="event-box-date">
+                                        {{ post.createDate | date ('j F, Y') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

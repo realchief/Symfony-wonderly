@@ -1,0 +1,89 @@
+{%- extends 'AdminBundle:Default:dashboard.html.twig' -%}
+
+{%- block stylesheets -%}
+    {{ parent() }}
+    <style>
+        .alert-danger {
+            margin-top: 20px;
+        }
+        .alert-danger ul {
+            list-style-type: none;
+        }
+    </style>
+{%- endblock -%}
+
+
+
+
+{% block main %}
+<div class="container">
+    {%
+    set createOrganizerPath = 'http://'
+        ~ app.request.httpHost
+        ~ path('admin_event_eventcreateuser', {'id': event.organize.id})
+    %}
+    {%
+    set createEventPath = 'http://'
+        ~ app.request.httpHost
+        ~ path('admin_event_eventcreate')
+    %}
+    {%
+    set refer = app.request.server.get('HTTP_REFERER')|default('/')
+    %}
+
+    {% if refer == createOrganizerPath or refer == createEventPath %}
+        <div class="alert alert-success col-md-5 text-center"
+             align="center" style="padding-top: 20px">
+            <span>Event successfully created!</span>
+        </div>
+        <div class="clearfix"></div>
+    {% endif %}
+
+
+    {% if event.name == null %}
+
+    {% else %}
+        {{ event.name }}<br>
+    {% endif %}
+
+
+    {% if event.imageEvent.toArray is empty %}
+
+
+    {% else %}
+        {% for img in  event.imageEvent.toArray %}
+            {% if img.img != null %}
+                <img src="{{ asset('uploads/image/') ~ img.img }}" style="width: 200px">
+            {% else %}
+                <img src="{{ img.url }}" style="width: 200px">
+            {% endif %}
+            <a href="{{ path('admin_event_eventimgdelete', {'id':img.id}) }}">Delete</a>
+        {% endfor %}
+    {% endif %}
+
+
+
+
+    {{ form_start(form) }}
+
+        {{ form_label(form.img) }}
+
+        {{ form_widget(form.img, {'attr':{'class':'form-conrol'}}) }}
+
+        {% if (form_errors(form.img)) != '' %}
+                {{ form_errors(form.img) }}
+        {% endif %}
+<br><br>
+        {{ form_label(form.url) }}
+    <br>
+        {{ form_widget(form.url, {'attr':{'class':'form-conrol'}}) }}
+
+        {% if linkError is defined %}
+            {{ linkError }}
+        {% endif %}
+    <br><br>
+    <input type="submit">
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

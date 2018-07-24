@@ -1,0 +1,88 @@
+{% extends '@Admin/Default/dashboard.html.twig' %}
+
+    {%- block stylesheets -%}
+        {%- stylesheets filter="cssrewrite"
+        '@AdminBundle/Resources/public/scss/_bootstrap.min.scss'
+        '@AdminBundle/Resources/public/css/font-awesome.min.css'
+        '@AdminBundle/Resources/public/css/style.css'
+        '@AdminBundle/Resources/public/css/table_style.css'
+        '@AdminBundle/Resources/public/assets/lib/jquery.datatables/plugins/bootstrap/3/dataTables.bootstrap.css'
+        -%}
+
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {%- endstylesheets -%}
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Raleway:300,200,100" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" rel="stylesheet" type="text/css">
+
+        <style>
+
+        </style>
+    {%- endblock -%}
+
+
+{% block main %}
+
+{#<label>Search:<input type="search" id="search-form" class="form-control input-sm" placeholder="" aria-controls="paymentstable"></label>#}
+<div class="admin_table container">
+        <table id="admin_organize_table" data-action-obj="userActions" data-searching="0" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th data-property="id" data-sort-name="Organizer.id">Id</th>
+                    <th data-property="img">Organizer Image</th>
+                    <th data-property="user.email" data-sort-name="User.email">Organizer Email</th>
+                    <th data-property="user.firstname" data-sort-name="User.firstname">Name</th>
+                    <th data-property="user.lastname" data-sort-name="User.lastname">Surname</th>
+                    <th data-property="age" data-sort-name="Organizer.age">Age</th>
+                    <th data-property="location" data-sort-name="Organizer.location">Location</th>
+                    <th data-property="address" data-sort-name="Organizer.address">Address</th>
+                    <th data-property="profession" data-sort-name="Organizer.profession">Profession</th>
+                    <th data-property="action">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+    {% block javascripts %}
+
+        {% javascripts
+        '@AdminBundle/Resources/public/assets/lib/jquery/jquery.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.js'
+        '@AdminBundle/Resources/public/assets/js/cleanzone.js'
+        '@AdminBundle/Resources/public/assets/lib/bootstrap/dist/js/bootstrap.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.datatables/js/jquery.dataTables.min.js'
+        '@AdminBundle/Resources/public/assets/lib/jquery.datatables/plugins/bootstrap/3/dataTables.bootstrap.js'
+        '@AdminBundle/Resources/public/assets/js/page-data-tables.js'
+        '@AdminBundle/Resources/public/assets/js/page-form-elements.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var table;
+                var searchForm = $('#search-form');
+                //initialize the javascript
+                App.init();
+//                App.dataTables();
+                App.formElements();
+
+                table = App.initializeDataTable('#admin_organize_table', {
+                    "pageLength": 100,
+                    ajax: {
+                        url: '{{- path('admin_user_userorganizerslist') -}}',
+                        data: App.createSerializeFormFn(searchForm)
+                    }
+                });
+                $('#search-form').on( 'keyup', function () {
+                    table.search( this.value ).draw();
+                } );
+            });
+
+
+        </script>
+
+    {% endblock %}

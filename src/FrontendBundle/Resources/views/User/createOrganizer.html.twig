@@ -1,0 +1,381 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+
+{%- block stylesheets -%}
+    {{ parent() }}
+    {% stylesheets
+    '@FrontendBundle/Resources/public/css/lib/jquery-ui.min.css'
+    '@FrontendBundle/Resources/public/css/lib/jquery-ui.multidatespicker.css'
+    filter="cssrewrite"
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {%- endstylesheets -%}
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+{%- endblock -%}
+
+{% form_theme eventForm _self %}
+
+{% block _createVehicle_age_widget %}
+    {% for child in form -%}
+        {% if not child.rendered %}
+            {{- form_widget(child) -}}
+            &nbsp;
+            {{- form_label(child) -}}
+            <br>
+        {% endif %}
+    {%- endfor %}
+{% endblock %}
+
+{% block _createVehicle_eventDate_widget %}
+    <div class="hidden">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block _createVehicle_eventDateEnd_widget %}
+    <div class="hidden">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block _createVehicle_periodic_widget %}
+    <div class="hidden">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block main %}
+
+     <div class="container">
+        <div class="first-time-top">
+            <h2>Welcome to Wonderly
+                {% if app.user.firstname is defined  %}
+                , {{ app.user.firstname }}
+                {% endif %}
+            </h2>
+            <h3>First of all, tell us about yourself so that we can better pick recommendations for you.</h3>
+        </div>
+
+        <div class="first-time-pick-role">
+            <h3>Who are you?</h3>
+            <div class="btn-group">
+                 <a class="btn" href="{{ path('frontend_user_createparent') }}">PARENT</a>
+                 <a class="btn active" href="{{ path('frontend_user_createorganizer') }}">ORGANIZER</a>
+            </div>
+        </div>
+
+         <div class="first-time-form">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    {% if errorAddress is defined %}
+                        <div class="alert alert-warning">
+                            {{ errorAddress }}
+                        </div>
+                    {% endif %}
+
+                    {{ form_start(eventForm) }}
+                    <div class="form-horizontal">
+                        {% if flow.getCurrentStepNumber() == 1 %}
+                            <div class="form-group ft-upload-wrapper">
+                                <div class="col-md-4 col-md-offset-4">
+                                    <label for="" class="ft-upload">
+                                        <span id="addPhoto">+ add photo</span>
+                                        {{ form_widget(eventForm.img) }}
+                                        <img id="qq" src="#">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.ageOrganizer) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.ageOrganizer) }}
+                                    {{ form_errors(eventForm.ageOrganizer) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.location) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.location) }}
+                                    {{ form_errors(eventForm.location) }}
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.address) }}
+                                </label>
+                                <div class="col-md-8">
+                                    <div id="locationField">
+                                        {{ form_widget(eventForm.address, {'id':'autocomplete', 'attr':{'class':"form-control", 'onFocus':"geolocate()"}}) }}
+                                    </div>
+                                    {{ form_errors(eventForm.address) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.profession) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.profession) }}
+                                    {{ form_errors(eventForm.profession) }}
+                                </div>
+                            </div>
+
+                        {% elseif flow.getCurrentStepNumber() == 2 %}
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.name) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.name) }}
+                                    {{ form_errors(eventForm.name) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.category) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.category) }}
+                                    {{ form_errors(eventForm.category) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.addressEvent) }}
+                                </label>
+                                <div class="col-md-8">
+                                    <div id="locationField">
+                                        {{ form_widget(eventForm.addressEvent, {'id':'autocomplete', 'attr':{'class':"form-control", 'onFocus':"geolocate()"}}) }}
+                                    </div>
+                                    {{ form_errors(eventForm.addressEvent) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.zip) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.zip) }}
+                                    {{ form_errors(eventForm.zip) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.site) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.site) }}
+                                    {{ form_errors(eventForm.site) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.phonenumber) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.phonenumber) }}
+                                    {{ form_errors(eventForm.phonenumber) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.email) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.email) }}
+                                    {{ form_errors(eventForm.email) }}
+                                </div>
+                            </div>
+                        {% elseif flow.getCurrentStepNumber() == 3 %}
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.outdoor) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.outdoor) }}
+                                    {{ form_errors(eventForm.outdoor) }}
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.description) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.description) }}
+                                    {{ form_errors(eventForm.description) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.age) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.age) }}
+                                    {{ form_errors(eventForm.age) }}
+                                </div>
+                            </div>
+
+                            {% set frontCreateOrganizer = true %}
+                            {% include '@Frontend/Partial/periodicForm.html.twig' %}
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="control-label">Hours of Operation</label>
+                                </div>
+                                <div class="col-md-8 form-inline">
+                                    <label>Start</label>
+                                    <div class='input-group col-md-4 date datetimepicker3'>
+                                        {{ form_widget(eventForm.originWork, {'attr':{'class':"form-control"}}) }}
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                    <label>End</label>
+                                    <div class='input-group col-md-4 date datetimepicker3'>
+                                        {{ form_widget(eventForm.finishWork, {'attr':{'class':"form-control"}}) }}
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="control-label">Event time</label>
+                                </div>
+                                <div class="col-md-8 form-inline">
+                                    <label>Start</label>
+                                    <div class='input-group col-md-4 date datetimepicker3'>
+                                        {{ form_widget(eventForm.origin, {'attr':{'class':"form-control"}}) }}
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                    <label>End</label>
+                                    <div class='input-group col-md-4 date datetimepicker3'>
+                                        {{ form_widget(eventForm.finish, {'attr':{'class':"form-control"}}) }}
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.food) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.food) }}
+                                    {{ form_errors(eventForm.food) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.tips) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(eventForm.tips) }}
+                                    {{ form_errors(eventForm.tips) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="control-label col-md-4">
+                                    {{ form_label(eventForm.price) }}
+                                </label>
+                                <div class="col-md-8">
+                                    <input type="checkbox" data-toggle="toggle" data-on="Price" data-off="Free" id="price-toggle">
+                                    <div class="price-hide hidden">
+                                        <br>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            {{ form_widget(eventForm.price, {'attr':{'class':"form-control"}}) }}
+                                            {{ form_errors(eventForm.price) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endif %}
+
+                        <div class="ft-actions">
+                            {% include '@CraueFormFlow/FormFlow/buttons.html.twig' with {
+                            craue_formflow_button_class_last: 'btn btn-next',
+                            craue_formflow_button_render_reset: false,
+                            craue_formflow_button_class_back: 'btn',
+                            craue_formflow_button_label_next: 'Next step',
+                            } %}
+                        </div>
+
+                    </div>
+                    {{ form_end(eventForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/js/lib/moment.min.js'
+    '@FrontendBundle/Resources/public/js/eventDate.js'
+    '@FrontendBundle/Resources/public/js/googlemaps.js'
+    '@FrontendBundle/Resources/public/js/lib/jquery-ui.min.js'
+    '@FrontendBundle/Resources/public/js/lib/jquery-ui.multidatespicker.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initAutocomplete"
+            async defer></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+
+    <script>
+        $(document).ready(function(){
+            $('.datetimepicker3').datetimepicker({
+                format: 'LT'
+            });
+            $('#price-toggle').change(function() {
+                if ($(this).prop('checked') === true) {
+                   $('.price-hide').removeClass('hidden');
+                }else {
+                    $('.price-hide').addClass('hidden');
+                    $('#createVehicle_price').val('')
+                }
+            })
+            changeDateToggleAndResetFields('#createVehicle_periodic', '#createVehicle_eventDate', '#createVehicle_eventDateEnd');
+            eventFormDateSave();
+            preSubmit('createVehicle', '#createVehicle_periodic', '#createVehicle_eventDate', '#createVehicle_eventDateEnd');
+        });
+    </script>
+
+
+{% endblock %}

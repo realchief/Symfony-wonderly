@@ -1,0 +1,19 @@
+{%- extends 'AdminBundle:Default:dashboard.html.twig' -%}
+
+{% block main %}
+
+    <div class="col-sm-6 col-md-6">
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_row(form.content, {'attr':{'class':"form-control"}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.place, {'attr':{'class':"form-control"}}) }}
+        </div>
+        <div class="form-group">
+            <input type="submit">
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

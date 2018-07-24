@@ -1,0 +1,33 @@
+{%- extends 'AdminBundle:Default:dashboard.html.twig' -%}
+
+{% block main %}
+    <div class="container" style="margin-top: 20px">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                       <th>Id</th>
+                       <th>Date Created</th>
+                       <th>Place</th>
+                       <th>Content</th>
+                       <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for advt in advts %}
+                        <tr>
+                            <td>{{ advt.id }}</td>
+                            <td>{{ advt.createDate | date('m/d/Y')}}</td>
+                            <td>{{ advt.placeString }}</td>
+                            <td>{{ advt.content }}</td>
+                            <td><a href="{{ path('admin_advt_delete', {'id': advt.id}) }}" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                     {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="navigation">
+            {{ knp_pagination_render(advts) }}
+        </div>
+    </div>
+{% endblock %}

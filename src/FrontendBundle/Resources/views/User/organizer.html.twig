@@ -1,0 +1,260 @@
+{% extends '@Frontend/frontend_layout.html.twig' %}
+
+{%- block stylesheets -%}
+    {{ parent() }}
+    {% stylesheets
+    '@FrontendBundle/Resources/public/css/contactForm.css' filter='cssrewrite'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{%- endblock -%}
+
+{% block main %}
+    <div class="container profile-container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="profile-img">
+                    <img src="{{ asset('uploads/image/') ~ organizer.img }}" />
+                    <span class="profile-approved">Approved <i class="fa fa-check"></i></span>
+                </div>
+
+                <div class="profile-sidebar">
+                    <div class="profile-sidebar__section">
+                        <h3>Confirmed information</h3>
+
+                        <ul class="clearfix">
+                            <li>
+                                <span class="profile-field__value">Documents</span>
+                                <span class="profile-field__approved"><i class="fa fa-check"></i></span>
+                            </li>
+                            {% if organizer.img != null %}
+                            <li>
+                                <span class="profile-field__value">Selfie</span>
+                                <span class="profile-field__approved"><i class="fa fa-check"></i></span>
+                            </li>
+                            {% endif %}
+                            <li>
+                                <span class="profile-field__value">Email</span>
+                                <span class="profile-field__approved"><i class="fa fa-check"></i></span>
+                            </li>
+                            <li>
+                                <span class="profile-field__value">Phone number</span>
+                                <span class="profile-field__approved"><i class="fa fa-check"></i></span>
+                            </li>
+                        </ul>
+                    </div>
+                    {% if user.social.toArray is not empty %}
+                    <div class="profile-sidebar__section">
+                        <h3>Accounts Linked</h3>
+                        <ul class="clearfix">
+                            {% for social in user.social.toArray %}
+                                {% if social.socialName == 'facebook' %}
+                                    <li>
+                                        <span class="profile-field__value">Facebook</span>
+                                        <span class="profile-field__approved"><i class="fa fa-check"></i></span>
+                                    </li>
+                                {% endif %}
+                                {% if social.socialName == 'instagram' %}
+                                    <li>
+                                        <span class="profile-field__value">Instagram</span>
+                                        <span class="profile-field__approved"><i class="fa fa-check"></i></span>
+                                    </li>
+                                {% endif %}
+
+                                {% if social.socialName == 'google' %}
+                                    <li>
+                                        <span class="profile-field__value">Google+</span>
+                                        <span class="profile-field__approved"><i class="fa fa-check"></i></span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="profile-sidebar__section">
+                        {#<h3>School</h3>#}
+                        {#<p class="profile-sidebar__value">EADA, NSA</p>#}
+
+                        {#<h3>Work</h3>#}
+                        {#<p class="profile-sidebar__value">School of Modern Dance</p>#}
+                        <h3>School / Work</h3>
+                        {{ organizer.profession }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <h1 class="profile__name">{{ user.firstname }} {{ user.lastname }}</h1>
+
+                <div class="profile__profession">
+                    {{ organizer.profession }}
+                </div>
+
+                {#<div class="profile__values">#}
+                    {#Rating#}
+                    {#<span class="profile__value">4,8</span>#}
+
+                    {#Comments#}
+                    {#<span class="profile__value">25</span>#}
+                {#</div>#}
+
+                <div class="profile__contact">
+                    <a href="#" class="btn btn-nonfilled contact" setTo="organizer" name="{{ user.firstname }}"
+                       id="{{ organizer.id }}">Contact with organizer</a>
+                </div>
+
+                <div {% if messageSent %}id="messageSent"{% endif %} class="modal fade">
+                    <div class="modal-content alert alert-success alert-dismissable text-center success-modal">
+                        <a href="#" id="messageSentClose" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> Message sent successfull
+                    </div>
+                </div>
+
+                {#{% if is_granted('ROLE_FATHER') %}#}
+                <div id="contactForm">
+                    <div class="contact-form-title">
+                        <h1>{{ user.firstname }}</h1>
+                        <small>Send me message</small>
+                    </div>
+                {{ form_start(contactForm) }}
+                {{ form_widget(contactForm) }}
+                <input class="btn" type="submit" />
+                {{ form_end(contactForm) }}
+
+                </div>
+                {#{% endif %}#}
+
+                {#<div class="profile__about">#}
+                    {#<h3>About me</h3>#}
+
+                    {#<p>I am a lover of music and dancing. I like to teach to dance and I do it frequently. I really appreciate good companies. I am cheerful but at the same time serious about my work, than teaching Latin rhythms.</p>#}
+                {#</div>#}
+
+                <div class="profile__services">
+                    <h3>Services</h3>
+
+                    <ul>
+                        {% for category in categories %}
+                            <li>{{ category.tag }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="profile__ads">
+                    <h3>All ads</h3>
+
+                    <div class="row profile__events">
+                        {% for event in events %}
+                             <div class="col-md-4 event-box-wrapper">
+                                 <div class="event-box">
+                                     <div class="event-box-top">
+                                         <!-- Event Images -->
+                                         {% if event.imageEvent.toArray is empty %}
+                                             <img src="{{ asset('Resources/public/img/event-img.jpg')  }}">
+                                         {% else %}
+                                             {% set count = 1 %}
+                                             {% for image in event.imageEvent.toArray if count < 2 %}
+                                                 <img src="{{ asset('uploads/image/') ~ image.img  }}">
+                                                 {% set count = count + 1 %}
+                                             {% endfor %}
+                                         {% endif %}
+                                     </div>
+                                     <div class="event-box-info">
+                                         <h3>
+                                             <a href="{{ path('frontend_event_eventshow', {'slug': event.name|slugify,'id':event.id}) }}">{{ event.name }}</a>
+                                         </h3>
+
+                                         <!-- Event Origin -->
+                                         {% if event.origin == null %}
+
+                                         {% else %}
+                                             <div class="event-box-date">
+                                                 <i class="glyphicon glyphicon-calendar"></i>
+                                                 {{ event.origin | date ('H:i') }}
+                                             </div>
+                                         {% endif %}
+
+
+                                         <!-- Event Address -->
+                                         {% if event.address == null %}
+
+                                         {% else %}
+                                             <div class="event-box-date">
+                                                 <i class="glyphicon glyphicon-map-marker"></i>
+                                                 {{ event.address }}
+                                             </div>
+                                         {% endif %}
+                                     </div>
+                                 </div>
+                             </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {#<div class="profile__comments">#}
+                    {#<h3>Clients comments <span>27</span></h3>#}
+
+                    {#<div class="comments">#}
+                        {#<div class="comment row">#}
+                            {#<div class="col-md-2">#}
+                                {#<div class="comment__avatar">#}
+                                    {#<img src="{{ asset('Resources/public/img/user-img.png') }}" alt="">#}
+                                {#</div>#}
+
+                                {#<div class="comment__username">Janie</div>#}
+                            {#</div>#}
+
+                            {#<div class="col-md-10 comment__body">#}
+                                {#Our tour was hosted by Julia. We got to experience 5 or 6 different Spanish places that weren't touristy and had amazing local vibe. Julia told us about Spanish culture and Barcelona in general. Amazing tour. Great food and interesting drinks. Definitely recommend.#}
+                            {#</div>#}
+                        {#</div>#}
+
+                        {#<div class="comment row">#}
+                            {#<div class="col-md-2">#}
+                                {#<div class="comment__avatar">#}
+                                    {#<img src="{{ asset('Resources/public/img/user-img.png') }}" alt="">#}
+                                {#</div>#}
+
+                                {#<div class="comment__username">Janie</div>#}
+                            {#</div>#}
+
+                            {#<div class="col-md-10 comment__body">#}
+                                {#Our tour was hosted by Julia. We got to experience 5 or 6 different Spanish places that weren't touristy and had amazing local vibe. Julia told us about Spanish culture and Barcelona in general. Amazing tour. Great food and interesting drinks. Definitely recommend.#}
+                            {#</div>#}
+                        {#</div>#}
+
+                        {#<div class="comment row">#}
+                            {#<div class="col-md-2">#}
+                                {#<div class="comment__avatar">#}
+                                    {#<img src="{{ asset('Resources/public/img/user-img.png') }}" alt="">#}
+                                {#</div>#}
+
+                                {#<div class="comment__username">Janie</div>#}
+                            {#</div>#}
+
+                            {#<div class="col-md-10 comment__body">#}
+                                {#Our tour was hosted by Julia. We got to experience 5 or 6 different Spanish places that weren't touristy and had amazing local vibe. Julia told us about Spanish culture and Barcelona in general. Amazing tour. Great food and interesting drinks. Definitely recommend.#}
+                            {#</div>#}
+                        {#</div>#}
+
+                        {#<div class="comments__more row">#}
+                            {#<div class="more-link__wrapper col-md-10 col-md-offset-2">#}
+                                {#<a href="#" class="more-link">More comments</a>#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/js/contactForm.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
